@@ -1,0 +1,22 @@
+version: '3'
+services:
+  flykit:
+    container_name: flykit-api
+    build:
+      context: ./backend/docker
+    volumes:
+      - ./backend:/data/project
+    tty: true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - 9501:9501
+    command: >
+        sh -c "cp .env.example .env &&
+                touch database/database.sqlite &&
+                composer install &&
+                composer dump-autoload && php bin/hyperf.php server:watch"
+
+networks:
+  default:
+    name: flykit
