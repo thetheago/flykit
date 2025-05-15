@@ -1,10 +1,10 @@
 <?php
 
-namespace HyperfTest\Unit\Exceptions;
+namespace HyperfTest\Unit\Factory;
 
 use Hyperf\Testing\TestCase;
 
-class WrongAccessAttemptExceptionTest extends TestCase
+class LoginInputFactoryTest extends TestCase
 {
     public function test()
     {

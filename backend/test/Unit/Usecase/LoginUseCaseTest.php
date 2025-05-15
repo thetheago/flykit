@@ -1,10 +1,12 @@
 <?php
 
-namespace HyperfTest\Unit\Exceptions;
+declare(strict_types=1);
+
+namespace HyperfTest\Unit\Usecase;
 
 use Hyperf\Testing\TestCase;
 
-class UserNotFoundExceptionTest extends TestCase
+class LoginUseCaseTest extends TestCase
 {
     public function test()
     {
