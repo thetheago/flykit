@@ -1,6 +1,10 @@
 <?php
 
 declare(strict_types=1);
+
+use App\Interfaces\LoginRepositoryInterface;
+use App\Repositories\LoginRepository;
+
 /**
  * This file is part of Hyperf.
  *
@@ -10,4 +14,5 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 return [
+    LoginRepositoryInterface::class => LoginRepository::class,
 ];
