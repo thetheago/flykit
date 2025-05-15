@@ -6,7 +6,7 @@ namespace App\Interfaces;
 
 use App\Model\User;
 
-interface UserRepositoryInterface 
+interface UserRepositoryInterface
 {
     public function getUserByEmail(string $email): ?User;
 }

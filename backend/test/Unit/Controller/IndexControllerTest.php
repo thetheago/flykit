@@ -1,9 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HyperfTest\Unit\Controller;
 
 use HyperfTest\HttpTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class IndexControllerTest extends HttpTestCase
 {
     public function testIndex()

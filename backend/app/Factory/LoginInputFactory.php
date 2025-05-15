@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use App\Request\LoginRequest;
 use App\Dto\Login\LoginInput;
+use App\Request\LoginRequest;
 
 class LoginInputFactory
 {

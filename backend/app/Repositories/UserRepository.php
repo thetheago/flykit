@@ -7,9 +7,8 @@ namespace App\Repositories;
 use App\Interfaces\UserRepositoryInterface;
 use App\Model\User;
 
-class UserRepository implements UserRepositoryInterface 
+class UserRepository implements UserRepositoryInterface
 {
-
     protected User $user;
 
     public function __construct(User $user)

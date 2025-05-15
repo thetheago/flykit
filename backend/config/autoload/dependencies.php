@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Interfaces\UserRepositoryInterface;
 use App\Repositories\UserRepository;
 
-/**
+/*
  * This file is part of Hyperf.
  *
  * @link     https://www.hyperf.io

@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use Carbon\Carbon;
 use Hyperf\DbConnection\Model\Model;
 
 /**
- * @property int $id 
+ * @property int $id
  * @property string $email
- * @property string $password 
- * @property int $is_admin 
- * @property string $remember_token 
- * @property \Carbon\Carbon $created_at 
- * @property \Carbon\Carbon $updated_at 
+ * @property string $password
+ * @property int $is_admin
+ * @property string $remember_token
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class User extends Model
 {

@@ -6,6 +6,10 @@ namespace HyperfTest\Unit\Usecase;
 
 use Hyperf\Testing\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class LoginUseCaseTest extends TestCase
 {
     public function test()

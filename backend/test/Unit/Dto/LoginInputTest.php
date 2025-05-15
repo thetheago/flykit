@@ -6,6 +6,10 @@ namespace App\Test\Unit\Dto\Login;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class LoginInputTest extends TestCase
 {
     public function test()

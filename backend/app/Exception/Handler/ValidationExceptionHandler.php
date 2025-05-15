@@ -15,7 +15,7 @@ class ValidationExceptionHandler extends ExceptionHandler
     public function handle(Throwable $throwable, ResponseInterface $response)
     {
         $this->stopPropagation();
-        
+
         /** @var ValidationException $throwable */
         $result = [
             'message' => 'Validation failed',
@@ -32,4 +32,4 @@ class ValidationExceptionHandler extends ExceptionHandler
     {
         return $throwable instanceof ValidationException;
     }
-} 
+}
