@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Test\Unit\Dto\Login;
 
+use App\Dto\Login\LoginInput;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @internal
- * @coversNothing
- */
 class LoginInputTest extends TestCase
 {
-    public function test()
+    public function testDtoWithSuccess()
     {
-        $this->assertTrue(false);
+        $email = 'test@example.com';
+        $password = 'password';
+
+        $input = new LoginInput(email: $email, password: $password);
+
+        $this->assertEquals($email, $input->getEmail());
+        $this->assertEquals($password, $input->getPassword());
     }
 }

@@ -4,6 +4,7 @@
     "command-runner.terminal.autoFocus": true,
     "command-runner.commands": {
         "Run PhpStan": "docker compose exec flykit vendor/bin/phpstan analyse -l 2 app",
-        "Run Phpcs": "docker compose exec flykit composer cs-fix"
+        "Run Phpcs": "docker compose exec flykit composer cs-fix",
+        "Run Hyperf Unit Tests": "docker compose exec flykit composer test"
     }
 }
