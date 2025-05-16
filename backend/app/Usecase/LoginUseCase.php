@@ -36,14 +36,14 @@ class LoginUseCase
             throw new WrongAccessAttemptException();
         }
 
-        if (password_verify(password: $input->getPassword(), hash: $user->password)) {
-            $tokenPayload = new JwtToken(id: $user->id, email: $user->email, iat: time());
-
-            $token = $this->jwtService->generateToken($tokenPayload);
-
-            return new LoginOutput($token);
+        if (!password_verify(password: $input->getPassword(), hash: $user->password)) {
+            throw new WrongAccessAttemptException();
         }
 
-        throw new WrongAccessAttemptException();
+        $tokenPayload = new JwtToken(id: $user->id, email: $user->email, iat: time());
+
+        $token = $this->jwtService->generateToken($tokenPayload);
+
+        return new LoginOutput($token);
     }
 }
