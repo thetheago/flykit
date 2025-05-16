@@ -20,6 +20,8 @@ jobs:
         with:
           php-version: '8.3'
           tools: composer
+          extensions: swoole, openswoole, mbstring, json, pdo, xml, curl, zip, bcmath, pcntl, posix, sockets, intl, fileinfo, sodium, redis
+          coverage: xdebug
 
       - name: Install Dependencies
         working-directory: ./backend
