@@ -23,19 +23,13 @@ class AuthController
 
     public function login(LoginRequest $request)
     {
-        try {
-            $input = $this->loginInputFactory->createFromRequest($request);
+        $input = $this->loginInputFactory->createFromRequest($request);
 
-            $loginUsecase = new LoginUseCase($this->userRepository);
-            $output = $loginUsecase->execute($input);
+        $loginUsecase = new LoginUseCase($this->userRepository);
+        $output = $loginUsecase->execute($input);
 
-            return (new Response())->json([
-                'token' => $output->getToken(),
-            ])->withStatus(HttpResponse::HTTP_OK);
-        } catch (WrongAccessAttemptException $e) {
-            return (new Response())->json([
-                'message' => $e->getMessage(),
-            ])->withStatus(HttpResponse::HTTP_UNAUTHORIZED);
-        }
+        return (new Response())->json([
+            'token' => $output->getToken(),
+        ])->withStatus(HttpResponse::HTTP_OK);
     }
 }
