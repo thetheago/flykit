@@ -15,8 +15,16 @@ jobs:
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
       - name: Install Dependencies
-        run: backend/composer install
+        working-directory: ./backend
+        run: composer install
 
       - name: Run Unit Tests
-        run: backend/composer test
+        working-directory: ./backend
+        run: composer test
