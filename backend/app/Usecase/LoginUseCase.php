@@ -31,7 +31,7 @@ class LoginUseCase
     {
         $user = $this->userRepository->getUserByEmail($input->getEmail());
 
-        if (! $user) {
+        if (!$user) {
             throw new WrongAccessAttemptException();
         }
 
