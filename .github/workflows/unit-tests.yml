@@ -7,12 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
       - name: Build
         run: cp -rf backend/docker/Dockerfile . && docker build -t hyperf .
+
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install
+
       - name: Run Unit Tests
         run: composer test
