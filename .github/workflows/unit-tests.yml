@@ -16,7 +16,7 @@ jobs:
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
       - name: Install Dependencies
-        run: composer install
+        run: backend/composer install
 
       - name: Run Unit Tests
-        run: composer test
+        run: backend/composer test
