@@ -20,8 +20,14 @@ jobs:
         with:
           php-version: '8.3'
           tools: composer
-          extensions: swoole, openswoole, mbstring, json, pdo, xml, curl, zip, bcmath, pcntl, posix, sockets, intl, fileinfo, sodium, redis
+          extensions: openswoole, mbstring, json, pdo, xml, curl, zip, bcmath, pcntl, posix, sockets, intl, fileinfo, sodium, redis
           coverage: xdebug
+
+      - name: Install OpenSwoole
+        run: |
+          pecl uninstall swoole || true
+          pecl install openswoole
+          echo "extension=openswoole.so" > /usr/local/etc/php/conf.d/openswoole.ini
 
       - name: Install Dependencies
         working-directory: ./backend
@@ -29,4 +35,6 @@ jobs:
 
       - name: Run Unit Tests
         working-directory: ./backend
-        run: composer test
+        run: |
+          php -m | grep -i swoole
+          composer test
