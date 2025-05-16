@@ -1,4 +1,3 @@
-version: '3'
 services:
   flykit:
     container_name: flykit-api
@@ -15,8 +14,33 @@ services:
         sh -c "cp .env.example .env &&
                 touch database/database.sqlite &&
                 composer install &&
-                composer dump-autoload && php bin/hyperf.php server:watch"
+                composer dump-autoload &&
+                php bin/hyperf.php migrate &&
+                php bin/hyperf.php server:watch"
+    networks:
+      - flykit
+    depends_on:
+      - flykit-db
+
+  flykit-db:
+    image: mysql:8.0
+    container_name: flykit-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: flykit
+      MYSQL_USER: flykit
+      MYSQL_PASSWORD: flykit
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - flykit
+
+volumes:
+  mysql_data:
 
 networks:
-  default:
+  flykit:
     name: flykit

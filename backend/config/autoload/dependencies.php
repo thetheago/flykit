@@ -1,7 +1,11 @@
 <?php
 
 declare(strict_types=1);
-/**
+
+use App\Interfaces\UserRepositoryInterface;
+use App\Repositories\UserRepository;
+
+/*
  * This file is part of Hyperf.
  *
  * @link     https://www.hyperf.io
@@ -10,4 +14,5 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 return [
+    UserRepositoryInterface::class => UserRepository::class,
 ];
