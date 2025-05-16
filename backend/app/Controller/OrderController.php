@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\HttpServer\Contract\ResponseInterface;
+use App\Request\OrderCreateRequest;
 
 class OrderController
 {
-    public function create(RequestInterface $request, ResponseInterface $response)
+    public function create(OrderCreateRequest $request)
     {
-        return $response->raw('Hello Hyperf!');
+        // $input = createOrderInputFactory($request);
+        // $usecase = new CreateOrderUsecase();
+        // $output = $usecase->execute($input);
+
+        // return $output;
+
+        return 'teste';
     }
 }
