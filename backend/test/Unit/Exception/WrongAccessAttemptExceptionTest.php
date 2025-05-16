@@ -4,16 +4,29 @@ declare(strict_types=1);
 
 namespace HyperfTest\Unit\Exception;
 
+use App\Exception\WrongAccessAttemptException;
 use Hyperf\Testing\TestCase;
+use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @internal
- * @coversNothing
- */
 class WrongAccessAttemptExceptionTest extends TestCase
 {
-    public function test()
+    public function testWrongAccessAttemptExceptionException()
     {
-        $this->assertTrue(false);
+        $this->expectException(WrongAccessAttemptException::class);
+        throw new WrongAccessAttemptException();
+    }
+
+    public function testWrongAccessAttemptExceptionMessage()
+    {
+        $this->expectException(WrongAccessAttemptException::class);
+        $this->expectExceptionMessage('Tentativa de acesso inválida.');
+        throw new WrongAccessAttemptException();
+    }
+
+    public function testWrongAccessAttemptExceptionCode()
+    {
+        $this->expectException(WrongAccessAttemptException::class);
+        $this->expectExceptionCode(Response::HTTP_UNAUTHORIZED);
+        throw new WrongAccessAttemptException();
     }
 }
