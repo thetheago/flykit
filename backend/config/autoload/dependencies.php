@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Interfaces\UserRepositoryInterface;
+use App\Interfaces\{AuthTokenInterface, UserRepositoryInterface};
 use App\Repositories\UserRepository;
+use App\Service\Jwt\JwtService;
 
 /*
  * This file is part of Hyperf.
@@ -15,4 +16,5 @@ use App\Repositories\UserRepository;
  */
 return [
     UserRepositoryInterface::class => UserRepository::class,
+    AuthTokenInterface::class => JwtService::class,
 ];

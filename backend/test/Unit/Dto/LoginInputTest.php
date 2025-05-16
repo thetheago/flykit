@@ -11,7 +11,7 @@ class LoginInputTest extends TestCase
 {
     public function testDtoWithSuccess()
     {
-        $email = 'test@example.com';
+        $email = 'mulan@filmebomdemais.com';
         $password = 'password';
 
         $input = new LoginInput(email: $email, password: $password);

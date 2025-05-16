@@ -7,21 +7,22 @@ namespace App\Usecase;
 use App\Dto\Login\LoginInput;
 use App\Dto\Login\LoginOutput;
 use App\Exception\WrongAccessAttemptException;
+use App\Interfaces\AuthTokenInterface;
 use App\Interfaces\UserRepositoryInterface;
-use Firebase\JWT\JWT;
-
-use function Hyperf\Support\env;
+use App\Service\Jwt\JwtToken;
 
 class LoginUseCase
 {
-    protected string $jwtSecretKey;
+    protected AuthTokenInterface $jwtService;
 
     protected UserRepositoryInterface $userRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
-    {
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        AuthTokenInterface $jwtService
+    ) {
         $this->userRepository = $userRepository;
-        $this->jwtSecretKey = env('JWT_SECRET_KEY');
+        $this->jwtService = $jwtService;
     }
 
     /**
@@ -36,17 +37,9 @@ class LoginUseCase
         }
 
         if (password_verify(password: $input->getPassword(), hash: $user->password)) {
-            $tokenPayload = [
-                'uuid' => $user->uuid,
-                'email' => $user->email,
-                'iat' => time(),
-            ];
+            $tokenPayload = new JwtToken(id: $user->id, email: $user->email, iat: time());
 
-            $token = JWT::encode(
-                payload: $tokenPayload,
-                key: $this->jwtSecretKey,
-                alg: 'HS256'
-            );
+            $token = $this->jwtService->generateToken($tokenPayload);
 
             return new LoginOutput($token);
         }
