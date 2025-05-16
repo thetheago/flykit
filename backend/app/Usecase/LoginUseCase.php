@@ -35,22 +35,22 @@ class LoginUseCase
             throw new WrongAccessAttemptException();
         }
 
-        if (password_verify(password: $input->getPassword(), hash: $user->password)) {
-            $tokenPayload = [
-                'uuid' => $user->uuid,
-                'email' => $user->email,
-                'iat' => time(),
-            ];
-
-            $token = JWT::encode(
-                payload: $tokenPayload,
-                key: $this->jwtSecretKey,
-                alg: 'HS256'
-            );
-
-            return new LoginOutput($token);
+        if (!password_verify(password: $input->getPassword(), hash: $user->password)) {
+            throw new WrongAccessAttemptException();
         }
 
-        throw new WrongAccessAttemptException();
+        $tokenPayload = [
+            'uuid' => $user->uuid,
+            'email' => $user->email,
+            'iat' => time(),
+        ];
+
+        $token = JWT::encode(
+            payload: $tokenPayload,
+            key: $this->jwtSecretKey,
+            alg: 'HS256'
+        );
+
+        return new LoginOutput($token);
     }
 }
