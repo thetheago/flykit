@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Test\Unit\Dto\Login;
+namespace HyperfTest\Unit\Dto;
 
 use App\Dto\Login\LoginInput;
 use PHPUnit\Framework\TestCase;

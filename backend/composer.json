@@ -73,6 +73,7 @@
             "rm -rf runtime/container"
         ],
         "test": "co-phpunit --prepend test/bootstrap.php --colors=always",
+        "coverage": "APP_ENV=testing XDEBUG_MODE=coverage co-phpunit --prepend test/bootstrap.php --colors=always --coverage-html .phpunit.cache/coverage",
         "cs-fix": "php-cs-fixer fix $1",
         "analyse": "phpstan analyse --memory-limit 300M",
         "start": [

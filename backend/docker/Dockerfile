@@ -1,4 +1,4 @@
-FROM hyperf/hyperf:8.3-alpine-v3.19-swoole
+FROM hyperf/hyperf:8.3-alpine-v3.19-swoole@sha256:27243bfb6fa3281c1c2e65327913a1d033528ab62ce5c4f4fc9986a180fb6991
 
 RUN apk update \
     && apk add --no-cache autoconf gcc make g++ linux-headers bash \

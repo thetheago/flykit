@@ -12,5 +12,14 @@
     <include>
       <directory suffix=".php">./app</directory>
     </include>
+    <exclude>
+      <directory suffix=".php">./app/Controller</directory>
+      <directory suffix=".php">./app/Exception/Handler</directory>
+      <directory suffix=".php">./app/Listener</directory>
+      <directory suffix=".php">./app/Middleware</directory>
+      <directory suffix=".php">./app/Repositories</directory>
+      <directory suffix=".php">./app/Request</directory>
+      <file>./app/Exception/BusinessException.php</file>
+    </exclude>
   </source>
 </phpunit>
