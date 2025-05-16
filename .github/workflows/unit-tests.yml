@@ -9,7 +9,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build
-        run: cp -rf docker/Dockerfile . && docker build -t hyperf .
+        run: cp -rf backend/docker/Dockerfile . && docker build -t hyperf .
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Install Dependencies
