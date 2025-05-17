@@ -18,6 +18,8 @@
       <directory suffix=".php">./app/Listener</directory>
       <directory suffix=".php">./app/Middleware</directory>
       <directory suffix=".php">./app/Repositories</directory>
+      <directory suffix=".php">./app/Model</directory>
+      <file>./app/Factory/OrderCreateInputFactory.php</file>
       <file>./app/Exception/BusinessException.php</file>
     </exclude>
   </source>
