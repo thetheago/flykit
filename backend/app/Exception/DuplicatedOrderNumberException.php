@@ -9,8 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DuplicatedOrderNumberException extends CustomException
 {
-    public function __construct(string $message = 'Order number already exists.')
+    public function __construct()
     {
-        parent::__construct($message, Response::HTTP_CONFLICT);
+        parent::__construct('Order number already exists.', Response::HTTP_CONFLICT);
     }
 }
