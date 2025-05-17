@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Interfaces\{AuthTokenInterface, UserRepositoryInterface};
-use App\Repositories\UserRepository;
+use App\Interfaces\{AuthTokenInterface, UserRepositoryInterface, OrderRepositoryInterface};
+use App\Repositories\{UserRepository, OrderRepository};
 use App\Service\Jwt\JwtService;
 
 /*
@@ -16,5 +16,6 @@ use App\Service\Jwt\JwtService;
  */
 return [
     UserRepositoryInterface::class => UserRepository::class,
+    OrderRepositoryInterface::class => OrderRepository::class,
     AuthTokenInterface::class => JwtService::class,
 ];

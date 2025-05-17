@@ -20,8 +20,8 @@ class OrderController
     {
         $input = $this->orderCreateInputFactory->createFromRequest($request);
         $usecase = new CreateOrderUsecase();
-        $usecase->execute($input);
+        $output = $usecase->execute($input);
 
-        return (new Response())->withStatus(HttpResponse::HTTP_OK);
+        return (new Response())->json($output->toArray())->withStatus(HttpResponse::HTTP_OK);
     }
 }

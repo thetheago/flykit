@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Dto\Order;
 
+use Carbon\Carbon;
+
 class OrderCreateInput
 {
     public function __construct(
@@ -13,6 +15,7 @@ class OrderCreateInput
         private readonly string $departureDate,
         private readonly string $arrivalDate,
         private readonly string $status,
+        private readonly int $userId,
     ) {
     }
 
@@ -32,18 +35,23 @@ class OrderCreateInput
         return $this->destination;
     }
 
-    public function getDepartureDate(): string
+    public function getDepartureDate(): Carbon
     {
-        return $this->departureDate;
+        return Carbon::createFromFormat('d-m-Y', $this->departureDate);
     }
 
-    public function getArrivalDate(): string
+    public function getArrivalDate(): Carbon
     {
-        return $this->arrivalDate;
+        return Carbon::createFromFormat('d-m-Y', $this->arrivalDate);
     }
 
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->userId;
     }
 }

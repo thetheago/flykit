@@ -1,9 +1,11 @@
 <?php
 
+
 declare(strict_types=1);
 
 namespace App\Exception\Handler;
 
+use App\Exception\CustomException;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Psr\Http\Message\ResponseInterface;
@@ -11,7 +13,7 @@ use Hyperf\HttpServer\Response;
 
 use Throwable;
 
-class AppExceptionHandler extends ExceptionHandler
+class CustomExceptionHandler extends ExceptionHandler
 {
     public function __construct(protected StdoutLoggerInterface $logger)
     {
@@ -19,13 +21,13 @@ class AppExceptionHandler extends ExceptionHandler
 
     public function handle(Throwable $throwable, ResponseInterface $response)
     {
-        $this->logger->error(sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile()));
-        $this->logger->error($throwable->getTraceAsString());
+        $this->stopPropagation();
+
         return (new Response())->json(['message' => $throwable->getMessage()])->withHeader('Server', 'Hyperf')->withStatus($throwable->getCode());
     }
 
     public function isValid(Throwable $throwable): bool
     {
-        return true;
+        return $throwable instanceof CustomException;
     }
 }
