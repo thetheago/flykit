@@ -9,12 +9,15 @@ use App\Dto\Order\OrderCreateOutput;
 use App\Exception\DuplicatedOrderNumberException;
 use App\Exception\InvalidArrivalDateException;
 use App\Interfaces\OrderRepositoryInterface;
-use Hyperf\Di\Annotation\Inject;
 
 class CreateOrderUsecase
 {
-    #[Inject]
     private OrderRepositoryInterface $orderRepository;
+
+    public function __construct(OrderRepositoryInterface $orderRepository)
+    {
+        $this->orderRepository = $orderRepository;
+    }
 
     /**
      * @throws DuplicatedOrderNumberException
