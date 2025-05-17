@@ -47,4 +47,9 @@ class Order extends Model
     {
         return $this->morphOne(User::class, 'user');
     }
+
+    public function belongsToUser(int $userId): bool
+    {
+        return $this->user_id === $userId;
+    }
 }

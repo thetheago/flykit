@@ -9,4 +9,6 @@ use App\Model\User;
 interface UserRepositoryInterface
 {
     public function getUserByEmail(string $email): ?User;
+
+    public function getUserById(int $userId): ?User;
 }

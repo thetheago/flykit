@@ -16,4 +16,5 @@ Router::post('/login', [AuthController::class, 'login']);
 
 Router::addGroup('/v1', function () {
     Router::post('/order', [OrderController::class, 'create']);
+    Router::patch('/order/{orderId}', [OrderController::class, 'update']);
 }, ['middleware' => [AuthMiddleware::class]]);
