@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-use Exception;
+use App\Exception\CustomException;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserNotFoundException extends Exception
+class UserNotFoundException extends CustomException
 {
     public function __construct()
     {

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-use Exception;
+use App\Exception\CustomException;
 use Symfony\Component\HttpFoundation\Response;
 
-class WrongAccessAttemptException extends Exception
+class WrongAccessAttemptException extends CustomException
 {
     public function __construct()
     {

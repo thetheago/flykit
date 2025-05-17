@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Exception\Handler;
 
-use App\Interfaces\CustomException;
+use App\Exception\CustomException;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Psr\Http\Message\ResponseInterface;
