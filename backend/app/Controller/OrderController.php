@@ -22,6 +22,6 @@ class OrderController
         $usecase = new CreateOrderUsecase();
         $output = $usecase->execute($input);
 
-        return (new Response())->json($output->toArray())->withStatus(HttpResponse::HTTP_OK);
+        return (new Response())->json($output->toArray())->withStatus(HttpResponse::HTTP_CREATED);
     }
 }

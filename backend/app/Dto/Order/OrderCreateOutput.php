@@ -18,6 +18,36 @@ class OrderCreateOutput
     ) {
     }
 
+    public function getOrderId(): int
+    {
+        return $this->orderId;
+    }
+
+    public function getRequesterName(): string
+    {
+        return $this->requesterName;
+    }
+
+    public function getDestination(): string
+    {
+        return $this->destination;
+    }
+
+    public function getDepartureDate(): Carbon
+    {
+        return Carbon::parse($this->departureDate);
+    }
+
+    public function getArrivalDate(): Carbon
+    {
+        return Carbon::parse($this->arrivalDate);
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
     public function toArray(): array
     {
         return [

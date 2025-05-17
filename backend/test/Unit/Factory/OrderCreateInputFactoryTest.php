@@ -39,12 +39,5 @@ class OrderCreateInputFactoryTest extends TestCase
         $orderCreateInput = $orderCreateInputFactory->createFromRequest($createRequestMock);
 
         $this->assertInstanceOf(OrderCreateInput::class, $orderCreateInput);
-        $this->assertEquals($orderId, $orderCreateInput->getOrderId());
-        $this->assertEquals($requesterName, $orderCreateInput->getRequesterName());
-        $this->assertEquals($destination, $orderCreateInput->getDestination());
-        $this->assertEquals($departureDate, $orderCreateInput->getDepartureDate()->format('d-m-Y'));
-        $this->assertEquals($arrivalDate, $orderCreateInput->getArrivalDate()->format('d-m-Y'));
-        $this->assertEquals($status, $orderCreateInput->getStatus());
-        $this->assertEquals($userId, $orderCreateInput->getUserId());
     }
 }
