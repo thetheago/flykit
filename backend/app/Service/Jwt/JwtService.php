@@ -2,10 +2,12 @@
 
 namespace App\Service\Jwt;
 
+use App\Interfaces\AuthTokenInterface;
+use App\Service\Jwt\JwtToken;
 use Firebase\JWT\JWT;
 use function Hyperf\Support\env;
 
-class JwtService
+class JwtService implements AuthTokenInterface
 {
     private string $jwtSecretKey;
 
