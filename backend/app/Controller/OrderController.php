@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Factory\OrderCreateInputFactory;
+use App\Interfaces\OrderRepositoryInterface;
 use App\Request\OrderCreateRequest;
 use App\Usecase\CreateOrderUsecase;
 use Hyperf\Di\Annotation\Inject;
@@ -16,10 +17,13 @@ class OrderController
     #[Inject]
     private OrderCreateInputFactory $orderCreateInputFactory;
 
+    #[Inject]
+    private OrderRepositoryInterface $orderRepository;
+
     public function create(OrderCreateRequest $request)
     {
         $input = $this->orderCreateInputFactory->createFromRequest($request);
-        $usecase = new CreateOrderUsecase();
+        $usecase = new CreateOrderUsecase($this->orderRepository);
         $output = $usecase->execute($input);
 
         return (new Response())->json($output->toArray())->withStatus(HttpResponse::HTTP_CREATED);
