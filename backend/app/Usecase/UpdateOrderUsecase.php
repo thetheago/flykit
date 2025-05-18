@@ -50,7 +50,7 @@ class UpdateOrderUsecase
             OrderStatus::APPROVED => $order->approve(),
             OrderStatus::REQUESTED => $order->request(),
             OrderStatus::CANCELLED => $order->cancel(),
-            default => throw new InvalidArgumentException("Invalid status: {$newStatus}")
+            default => throw new InvalidArgumentException("Invalid status: $newStatus")
         };
 
         $this->orderRepository->update(order: $order, changesToUpdate: ['status' => $order->status]);
