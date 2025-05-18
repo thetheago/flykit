@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\OrderState;
+namespace App\Interfaces;
 
 use App\Model\Order;
 

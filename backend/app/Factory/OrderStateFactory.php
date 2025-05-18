@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\OrderState;
+namespace App\Factory;
 
 use App\Constants\OrderStatus;
+use App\Interfaces\OrderStateInterface;
+use App\OrderState\ApprovedOrderState;
+use App\OrderState\CancelledOrderState;
+use App\OrderState\RequestedOrderState;
 
 class OrderStateFactory
 {

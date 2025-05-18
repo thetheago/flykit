@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\OrderState;
 
 use App\Exception\InvalidStateTransitionException;
+use App\Interfaces\OrderStateInterface;
 use App\Model\Order;
 
 abstract class AbstractOrderState implements OrderStateInterface

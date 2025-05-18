@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\OrderState\OrderStateFactory;
-use App\OrderState\OrderStateInterface;
+use App\Factory\OrderStateFactory;
+use App\Interfaces\OrderStateInterface;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\ModelListener\Annotation\ModelListener;
 use Hyperf\ModelListener\Contract\ModelListenerInterface;
