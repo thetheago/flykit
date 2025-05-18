@@ -7,6 +7,7 @@ namespace HyperfTest\Unit\Factory;
 use App\Dto\Order\OrderCreateInput;
 use App\Factory\OrderCreateInputFactory;
 use App\Request\OrderCreateRequest;
+use Hyperf\Contract\ContainerInterface;
 use Hyperf\Testing\TestCase;
 use Mockery;
 
@@ -25,7 +26,8 @@ class OrderCreateInputFactoryTest extends TestCase
         $userMock = Mockery::mock();
         $userMock->id = $userId;
 
-        $this->container->set('user', $userMock);
+        $container = $this->container->get(ContainerInterface::class);
+        $container->set('user', $userMock);
 
         $createRequestMock = Mockery::mock(OrderCreateRequest::class);
         $createRequestMock->shouldReceive('input')->with('orderId')->andReturn($orderId);
@@ -36,7 +38,7 @@ class OrderCreateInputFactoryTest extends TestCase
         $createRequestMock->shouldReceive('input')->with('status')->andReturn($status);
 
         $orderCreateInputFactory = new OrderCreateInputFactory();
-        $orderCreateInput = $orderCreateInputFactory->createFromRequest($createRequestMock);
+        $orderCreateInput = $orderCreateInputFactory->createFromRequest($createRequestMock, $this->container);
 
         $this->assertInstanceOf(OrderCreateInput::class, $orderCreateInput);
     }

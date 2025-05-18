@@ -11,7 +11,8 @@ use App\Interfaces\{
     UserRepositoryInterface
 };
 use App\Request\{OrderCreateRequest, OrderUpdateRequest};
-use App\Usecase\{CreateOrderUsecase, UpdateOrderUsecase};
+use App\Usecase\{CreateOrderUsecase, ListAllOrderUsecase, UpdateOrderUsecase};
+use Hyperf\Contract\ContainerInterface;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -33,9 +34,12 @@ class OrderController
     #[Inject]
     private OrderAuthorizationValidatorInterface $orderAuthorizationValidator;
 
+    #[Inject]
+    private ContainerInterface $container;
+
     public function create(OrderCreateRequest $request)
     {
-        $input = $this->orderCreateInputFactory->createFromRequest($request);
+        $input = $this->orderCreateInputFactory->createFromRequest($request, $this->container);
         $usecase = new CreateOrderUsecase($this->orderRepository);
         $output = $usecase->execute($input);
 
@@ -44,7 +48,7 @@ class OrderController
 
     public function update(OrderUpdateRequest $request)
     {
-        $input = $this->orderUpdateInputFactory->createFromRequest($request);
+        $input = $this->orderUpdateInputFactory->createFromRequest($request, $this->container);
         $usecase = new UpdateOrderUsecase(
             orderRepository: $this->orderRepository,
             userRepository: $this->userRepository,
