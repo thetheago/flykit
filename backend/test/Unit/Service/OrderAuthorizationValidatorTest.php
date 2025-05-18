@@ -131,4 +131,26 @@ class OrderAuthorizationValidatorTest extends TestCase
             newStatus: $newStatus
         );
     }
+
+    public function testOrderAuthorizationValidatorCanUserListAllOrders()
+    {
+        $user = Mockery::mock(User::class);
+        $user->shouldReceive('isAdmin')->andReturn(true);
+
+        $orderAuthorizationValidator = new OrderAuthorizationValidator();
+        $result = $orderAuthorizationValidator->canUserListAllOrders($user);
+
+        $this->assertTrue($result);
+    }
+
+    public function testOrderAuthorizationValidatorCannotUserListAllOrders()
+    {
+        $user = Mockery::mock(User::class);
+        $user->shouldReceive('isAdmin')->andReturn(false);
+
+        $orderAuthorizationValidator = new OrderAuthorizationValidator();
+        $result = $orderAuthorizationValidator->canUserListAllOrders($user);
+
+        $this->assertFalse($result);
+    }
 }

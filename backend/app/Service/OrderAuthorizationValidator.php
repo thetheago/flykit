@@ -28,4 +28,9 @@ class OrderAuthorizationValidator implements OrderAuthorizationValidatorInterfac
             throw new AccessDeniedException('Users cannot update own orders status.');
         }
     }
+
+    public function canUserListAllOrders(User $user): bool
+    {
+        return $user->isAdmin();
+    }
 } 

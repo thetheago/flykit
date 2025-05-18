@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Dto\Order\OrderCreateInput;
 use App\Model\Order;
 use App\Interfaces\OrderRepositoryInterface;
+use Hyperf\Database\Model\Collection;
 
 class OrderRepository implements OrderRepositoryInterface
 {
@@ -31,5 +32,21 @@ class OrderRepository implements OrderRepositoryInterface
     public function update(Order $order, array $changesToUpdate): void
     {
         $order->update($changesToUpdate);
+    }
+
+    /**
+     * @return Collection<Order>
+     */
+    public function findAllByUserId(int $userId): Collection
+    {
+        return Order::where('user_id', $userId)->get();
+    }
+
+    /**
+     * @return Collection<Order>
+     */
+    public function findAll(): Collection
+    {
+        return Order::all();
     }
 }

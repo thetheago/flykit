@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Factory\{OrderCreateInputFactory, OrderUpdateInputFactory};
+use App\Factory\{ListAllOrderOutputFactory, OrderCreateInputFactory, OrderUpdateInputFactory};
 use App\Interfaces\{
     OrderAuthorizationValidatorInterface,
     OrderRepositoryInterface,
@@ -32,6 +32,9 @@ class OrderController
     private OrderUpdateInputFactory $orderUpdateInputFactory;
 
     #[Inject]
+    private ListAllOrderOutputFactory $listAllOrderOutputFactory;
+
+    #[Inject]
     private OrderAuthorizationValidatorInterface $orderAuthorizationValidator;
 
     #[Inject]
@@ -57,5 +60,21 @@ class OrderController
         $usecase->execute($input);
 
         return (new Response())->withStatus(HttpResponse::HTTP_NO_CONTENT);
+    }
+
+    public function list()
+    {
+        $user = $this->container->get('user');
+        $userId = (int) $user->id;
+
+        $usecase = new ListAllOrderUsecase(
+            orderRepository: $this->orderRepository,
+            userRepository: $this->userRepository,
+            orderAuthorizationValidator: $this->orderAuthorizationValidator,
+            listAllOrderOutputFactory: $this->listAllOrderOutputFactory
+        );
+
+        $output = $usecase->execute($userId);
+        return (new Response())->json($output->getOrders())->withStatus(HttpResponse::HTTP_OK);
     }
 }
