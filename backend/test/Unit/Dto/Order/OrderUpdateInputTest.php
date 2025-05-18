@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HyperfTest\Unit\Dto\Order;
 
 use App\Dto\Order\OrderUpdateInput;
+use App\Constants\OrderStatus;
 use Hyperf\Testing\TestCase;
 
 class OrderUpdateInputTest extends TestCase
@@ -13,7 +14,7 @@ class OrderUpdateInputTest extends TestCase
     {
         $orderId = 1;
         $userId = 1;
-        $status = 'approved';
+        $status = OrderStatus::APPROVED;
 
         $input = new OrderUpdateInput(
             orderId: $orderId,
@@ -30,7 +31,7 @@ class OrderUpdateInputTest extends TestCase
     {
         $orderId = '1';
         $userId = 1;
-        $status = 'approved';
+        $status = OrderStatus::APPROVED;
 
         $input = new OrderUpdateInput(
             orderId: $orderId,

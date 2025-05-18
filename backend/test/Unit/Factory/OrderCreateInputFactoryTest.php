@@ -10,7 +10,7 @@ use App\Request\OrderCreateRequest;
 use Hyperf\Contract\ContainerInterface;
 use Hyperf\Testing\TestCase;
 use Mockery;
-
+use App\Constants\OrderStatus;
 class OrderCreateInputFactoryTest extends TestCase
 {
     public function testOrderCreateInputFactoryWithSuccess()
@@ -20,7 +20,7 @@ class OrderCreateInputFactoryTest extends TestCase
         $destination = 'New York';
         $departureDate = '01-01-2023';
         $arrivalDate = '05-01-2023';
-        $status = 'pending';
+        $status = OrderStatus::REQUESTED;
         $userId = 1;
 
         $userMock = Mockery::mock();

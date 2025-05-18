@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HyperfTest\Unit\Dto\Order;
 
 use App\Dto\Order\OrderCreateOutput;
+use App\Constants\OrderStatus;
 use Hyperf\Testing\TestCase;
 
 class OrderCreateOutputTest extends TestCase
@@ -25,7 +26,7 @@ class OrderCreateOutputTest extends TestCase
         $this->destination = 'New York';
         $this->departureDate = '01-01-2023';
         $this->arrivalDate = '05-01-2023';
-        $this->status = 'pending';
+        $this->status = OrderStatus::REQUESTED;
     }
 
     public function testOrderCreateOutputDtoWithSuccess()

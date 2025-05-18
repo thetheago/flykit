@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HyperfTest\Unit\Usecase;
 
+use App\Constants\OrderStatus;
 use App\Dto\Order\OrderCreateInput;
 use App\Dto\Order\OrderCreateOutput;
 use App\Exception\DuplicatedOrderNumberException;
@@ -24,9 +25,8 @@ class CreateOrderUsecaseTest extends TestCase
         $destination = 'New York';
         $departureDate = '01-01-2023';
         $arrivalDate = '05-01-2023';
-        $status = 'pending';
+        $status = OrderStatus::REQUESTED;
 
-        // Mock order
         $order = new Order();
         $order->order_id = $orderId;
         $order->requester_name = $requesterName;
