@@ -76,6 +76,11 @@ class Order extends Model
         $this->status = $state->getStatus();
     }
 
+    public function getState(): OrderStateInterface
+    {
+        return $this->state;
+    }
+
     public function approve(): void
     {
         $this->state->approve($this);
