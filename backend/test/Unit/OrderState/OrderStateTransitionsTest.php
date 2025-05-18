@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\OrderState;
 
+use App\Factory\OrderStateFactory;
 use App\Model\Order;
 use Hyperf\Testing\TestCase;
 use HyperfTest\Unit\OrderState\OrderStateTransitionsTestProvider;
