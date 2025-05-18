@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HyperfTest\Testing\Usecase;
+namespace HyperfTest\Unit\Usecase;
 
 use App\Dto\Order\OrderCreateInput;
 use App\Dto\Order\OrderCreateOutput;

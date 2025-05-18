@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exception;
+namespace HyperfTest\Unit\Exception;
 
 use Hyperf\Testing\TestCase;
 use App\Exception\InvalidArrivalDateException;
@@ -14,14 +14,14 @@ class InvalidArrivalDateExceptionTest extends TestCase
         throw new InvalidArrivalDateException();
     }
 
-    public function testUserNotFoundExceptionMessage()
+    public function testInvalidArrivalDateExceptionMessage()
     {
         $this->expectException(InvalidArrivalDateException::class);
         $this->expectExceptionMessage('Invalid arrival date. It must be greater than departure date.');
         throw new InvalidArrivalDateException();
     }
 
-    public function testUserNotFoundExceptionCode()
+    public function testInvalidArrivalDateExceptionCode()
     {
         $this->expectException(InvalidArrivalDateException::class);
         $this->expectExceptionCode(Response::HTTP_BAD_REQUEST);

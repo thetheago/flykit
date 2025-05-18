@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Unit\Request;
+namespace HyperfTest\Unit\Request;
 
 use App\Request\OrderUpdateRequest;
 use Hyperf\Testing\TestCase;
