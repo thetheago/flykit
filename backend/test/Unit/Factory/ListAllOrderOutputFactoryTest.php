@@ -8,6 +8,7 @@ use App\Model\Order;
 use App\Constants\OrderStatus;
 use Hyperf\Database\Model\Collection;
 use PHPUnit\Framework\TestCase;
+use Carbon\Carbon;
 
 class ListAllOrderOutputFactoryTest extends TestCase
 {
@@ -45,5 +46,17 @@ class ListAllOrderOutputFactoryTest extends TestCase
         $listAllOrderOutput = $listAllOrderOutputFactory->createFromModelCollection($orders);
 
         $this->assertInstanceOf(ListAllOrderOutput::class, $listAllOrderOutput);
+        $this->assertEquals($orders->count(), count($listAllOrderOutput->getOrders()));
+        
+        foreach ($listAllOrderOutput->getOrders() as $order) {
+            $this->assertTrue(
+                Carbon::createFromFormat('d-m-Y', $order['departureDate']) !== false,
+                'Departure date should be in d-m-Y format'
+            );
+            $this->assertTrue(
+                Carbon::createFromFormat('d-m-Y', $order['arrivalDate']) !== false,
+                'Arrival date should be in d-m-Y format'
+            );
+        }
     }
 }

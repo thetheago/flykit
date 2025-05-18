@@ -6,6 +6,7 @@ namespace App\Factory;
 
 use App\Dto\Order\GetOrderOutput;
 use App\Model\Order;
+use Carbon\Carbon;
 
 class GetOrderOutputFactory
 {
@@ -15,8 +16,8 @@ class GetOrderOutputFactory
             'orderId' => $order->order_id,
             'requesterName' => $order->requester_name,
             'destination' => $order->destination,
-            'departureDate' => $order->departure_date,
-            'arrivalDate' => $order->arrival_date,
+            'departureDate' => Carbon::parse($order->departure_date)->format('d-m-Y'),
+            'arrivalDate' => Carbon::parse($order->arrival_date)->format('d-m-Y'),
             'status' => $order->status,
         ]);
     }
