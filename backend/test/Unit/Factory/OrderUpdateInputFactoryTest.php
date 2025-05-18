@@ -8,6 +8,7 @@ use App\Constants\OrderStatus;
 use App\Dto\Order\OrderUpdateInput;
 use App\Factory\OrderUpdateInputFactory;
 use App\Request\OrderUpdateRequest;
+use Hyperf\Contract\ContainerInterface;
 use Hyperf\Testing\TestCase;
 use Mockery;
 
@@ -22,14 +23,15 @@ class OrderUpdateInputFactoryTest extends TestCase
         $userMock = Mockery::mock();
         $userMock->id = $userId;
 
-        $this->container->set('user', $userMock);
+        $container = $this->container->get(ContainerInterface::class);
+        $container->set('user', $userMock);
 
         $updateRequestMock = Mockery::mock(OrderUpdateRequest::class);
         $updateRequestMock->shouldReceive('route')->with('orderId')->andReturn($orderId);
         $updateRequestMock->shouldReceive('input')->with('status')->andReturn($status);
 
         $orderUpdateInputFactory = new OrderUpdateInputFactory();
-        $orderUpdateInput = $orderUpdateInputFactory->createFromRequest($updateRequestMock);
+        $orderUpdateInput = $orderUpdateInputFactory->createFromRequest($updateRequestMock, $container);
 
         $this->assertInstanceOf(OrderUpdateInput::class, $orderUpdateInput);
     }

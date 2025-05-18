@@ -14,4 +14,6 @@ interface OrderAuthorizationValidatorInterface
      * @throws AccessDeniedException
      */
     public function validateOrderUpdate(Order $order, User $user, string $newStatus): void;
+
+    public function canUserListAllOrders(User $user): bool;
 } 

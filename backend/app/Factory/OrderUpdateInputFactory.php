@@ -6,19 +6,15 @@ namespace App\Factory;
 
 use App\Dto\Order\OrderUpdateInput;
 use App\Request\OrderUpdateRequest;
-use Hyperf\Di\Container;
-use Hyperf\Di\Annotation\Inject;
+use Hyperf\Contract\ContainerInterface;
 
 class OrderUpdateInputFactory
 {
-    #[Inject]
-    private Container $container;
-
-    public function createFromRequest(OrderUpdateRequest $request): OrderUpdateInput
+    public function createFromRequest(OrderUpdateRequest $request, ContainerInterface $container): OrderUpdateInput
     {
         $status = $request->input('status');
         $orderId = $request->route('orderId');
-        $user = $this->container->get('user');
+        $user = $container->get('user');
 
         return new OrderUpdateInput(
             status: $status,

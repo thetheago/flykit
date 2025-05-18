@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HyperfTest\Unit\Dto\Order;
 
 use App\Dto\Order\OrderCreateInput;
+use App\Constants\OrderStatus;
 use Hyperf\Testing\TestCase;
 
 class OrderCreateInputTest extends TestCase
@@ -16,7 +17,7 @@ class OrderCreateInputTest extends TestCase
         $destination = 'New York';
         $departureDate = '01-01-2023';
         $arrivalDate = '05-01-2023';
-        $status = 'pending';
+        $status = OrderStatus::REQUESTED;
         $userId = 1;
 
         $input = new OrderCreateInput(
