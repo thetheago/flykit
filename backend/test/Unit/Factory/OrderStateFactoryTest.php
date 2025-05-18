@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HyperfTest\Unit\OrderState;
+namespace HyperfTest\Unit\Factory;
 
 use App\Constants\OrderStatus;
 use App\Factory\OrderStateFactory;

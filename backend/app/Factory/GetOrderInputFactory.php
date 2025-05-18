@@ -12,7 +12,7 @@ class GetOrderInputFactory
 {
     public function createFromRequest(RequestInterface $request, ContainerInterface $container): GetOrderInput
     {
-        $orderId = $request->input('orderId');
+        $orderId = $request->route('orderId');
 
         $user = $container->get('user');
         $userId = (int) $user->id;
