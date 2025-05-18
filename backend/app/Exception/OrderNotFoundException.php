@@ -11,6 +11,6 @@ class OrderNotFoundException extends CustomException
 {
     public function __construct(int $orderId)
     {
-        parent::__construct(message: "Order with id $orderId does not exist.", code: Response::HTTP_NOT_FOUND);
+        parent::__construct(message: "Order with id $orderId was not found.", code: Response::HTTP_NOT_FOUND);
     }
 }

@@ -6,6 +6,7 @@ namespace App\Factory;
 
 use App\Dto\Order\ListAllOrderOutput;
 use App\Model\Order;
+use Carbon\Carbon;
 use Hyperf\Database\Model\Collection;
 
 class ListAllOrderOutputFactory
@@ -22,8 +23,8 @@ class ListAllOrderOutputFactory
                 'orderId' => $order->order_id,
                 'requesterName' => $order->requester_name,
                 'destination' => $order->destination,
-                'departureDate' => $order->departure_date,
-                'arrivalDate' => $order->arrival_date,
+                'departureDate' => Carbon::parse($order->departure_date)->format('d-m-Y'),
+                'arrivalDate' => Carbon::parse($order->arrival_date)->format('d-m-Y'),
                 'status' => $order->status,
             ];
         });

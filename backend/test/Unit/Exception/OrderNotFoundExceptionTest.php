@@ -21,7 +21,7 @@ class OrderNotFoundExceptionTest extends TestCase
         $orderId = 1;
 
         $this->expectException(OrderNotFoundException::class);
-        $this->expectExceptionMessage("Order with id $orderId does not exist.");
+        $this->expectExceptionMessage("Order with id $orderId was not found.");
         throw new OrderNotFoundException($orderId);
     }
 

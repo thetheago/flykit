@@ -18,6 +18,12 @@ class OrderRepository implements OrderRepositoryInterface
         return Order::where('order_id', $orderId)->first();
     }
 
+    public function findByOrderIdWithCheckUser(int $orderId, int $userId): ?Order
+    {
+        return Order::where('order_id', $orderId)
+            ->where('user_id', $userId)->first();
+    }
+
     public function create(OrderCreateInput $input): Order
     {
         return Order::create([

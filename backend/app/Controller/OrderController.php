@@ -4,20 +4,35 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Factory\{ListAllOrderInputFactory, ListAllOrderOutputFactory, OrderCreateInputFactory, OrderUpdateInputFactory};
+use App\Factory\{
+    GetOrderInputFactory,
+    GetOrderOutputFactory,
+    ListAllOrderInputFactory,
+    ListAllOrderOutputFactory,
+    OrderCreateInputFactory,
+    OrderUpdateInputFactory
+};
 use App\Interfaces\{
     OrderAuthorizationValidatorInterface,
     OrderRepositoryInterface,
     UserRepositoryInterface
 };
-use App\Request\{ListAllOrderRequest, OrderCreateRequest, OrderUpdateRequest};
-use App\Usecase\{CreateOrderUsecase, ListAllOrderUsecase, UpdateOrderUsecase};
-use Hyperf\Contract\ContainerInterface;
+use App\Request\{
+    ListAllOrderRequest,
+    OrderCreateRequest,
+    OrderUpdateRequest
+};
+use App\Usecase\{
+    CreateOrderUsecase,
+    GetOrderUsecase,
+    ListAllOrderUsecase,
+    UpdateOrderUsecase
+};
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class OrderController
+class OrderController extends AbstractController
 {    
     #[Inject]
     private OrderRepositoryInterface $orderRepository;
@@ -38,10 +53,13 @@ class OrderController
     private ListAllOrderOutputFactory $listAllOrderOutputFactory;
 
     #[Inject]
-    private OrderAuthorizationValidatorInterface $orderAuthorizationValidator;
+    private GetOrderInputFactory $getOrderInputFactory;
 
     #[Inject]
-    private ContainerInterface $container;
+    private GetOrderOutputFactory $getOrderOutputFactory;
+
+    #[Inject]
+    private OrderAuthorizationValidatorInterface $orderAuthorizationValidator;
 
     public function create(OrderCreateRequest $request)
     {
@@ -78,5 +96,19 @@ class OrderController
 
         $output = $usecase->execute($input);
         return (new Response())->json($output->getOrders())->withStatus(HttpResponse::HTTP_OK);
+    }
+
+    public function show()
+    {
+        $input = $this->getOrderInputFactory->createFromRequest($this->request, $this->container);
+        $usecase = new GetOrderUsecase(
+            orderRepository: $this->orderRepository,
+            userRepository: $this->userRepository,
+            orderAuthorizationValidator: $this->orderAuthorizationValidator,
+            getOrderOutputFactory: $this->getOrderOutputFactory
+        );
+        $output = $usecase->execute($input);
+
+        return (new Response())->json($output->getOrder())->withStatus(HttpResponse::HTTP_OK);
     }
 }
