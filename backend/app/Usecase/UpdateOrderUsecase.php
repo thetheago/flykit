@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Usecase;
 
+use App\Constants\OrderStatus;
 use App\Dto\Order\OrderUpdateInput;
 use App\Exception\OrderNotFoundException;
 use App\Exception\UserNotFoundException;
@@ -46,9 +47,9 @@ class UpdateOrderUsecase
 
         $newStatus = $input->getStatus();
         match ($newStatus) {
-            'approved' => $order->approve(),
-            'requested' => $order->request(),
-            'cancelled' => $order->cancel(),
+            OrderStatus::APPROVED => $order->approve(),
+            OrderStatus::REQUESTED => $order->request(),
+            OrderStatus::CANCELLED => $order->cancel(),
             default => throw new InvalidArgumentException("Invalid status: {$newStatus}")
         };
 

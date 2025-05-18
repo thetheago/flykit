@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\OrderState;
 
+use App\Constants\OrderStatus;
 use App\Model\Order;
 
 class RequestedOrderState extends AbstractOrderState
@@ -20,6 +21,6 @@ class RequestedOrderState extends AbstractOrderState
 
     public function getStatus(): string
     {
-        return 'requested';
+        return OrderStatus::REQUESTED;
     }
 } 
