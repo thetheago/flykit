@@ -21,7 +21,7 @@ class OrderUpdateRequestTest extends TestCase
     {
         $request = new OrderUpdateRequest($this->getContainer());
         $messages = $request->messages();
-        
+
         $this->assertArrayHasKey('status.required', $messages);
         $this->assertArrayHasKey('status.in', $messages);
 

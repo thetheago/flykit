@@ -20,6 +20,7 @@
       <directory suffix=".php">./app/Repositories</directory>
       <directory suffix=".php">./app/Model</directory>
       <file>./app/Factory/OrderCreateInputFactory.php</file>
+      <file>./app/Factory/OrderUpdateInputFactory.php</file>
       <file>./app/Exception/BusinessException.php</file>
     </exclude>
   </source>
