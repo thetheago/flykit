@@ -10,6 +10,9 @@ use App\Exception\UserNotFoundException;
 use App\Interfaces\OrderAuthorizationValidatorInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Model\Order;
+use App\Model\User;
+use InvalidArgumentException;
 
 class UpdateOrderUsecase
 {
@@ -30,17 +33,10 @@ class UpdateOrderUsecase
     public function execute(OrderUpdateInput $input): void
     {
         $orderId = $input->getOrderId();
-        $order = $this->orderRepository->findByOrderId($orderId);
+        $order = $this->getOrder($orderId);
 
-        if (!$order) {
-            throw new OrderNotFoundException($orderId);
-        }
-
-        $user = $this->userRepository->getUserById($input->getUserId());
-
-        if (!$user) {
-            throw new UserNotFoundException();
-        }
+        $userId = $input->getUserId();
+        $user = $this->getUser($userId);
 
         $this->orderAuthorizationValidator->validateOrderUpdate(
             order: $order,
@@ -53,9 +49,31 @@ class UpdateOrderUsecase
             'approved' => $order->approve(),
             'requested' => $order->request(),
             'cancelled' => $order->cancel(),
-            default => throw new \InvalidArgumentException("Invalid status: {$newStatus}")
+            default => throw new InvalidArgumentException("Invalid status: {$newStatus}")
         };
 
         $this->orderRepository->update(order: $order, changesToUpdate: ['status' => $order->status]);
+    }
+
+    private function getOrder(int $orderId): Order
+    {
+        $order = $this->orderRepository->findByOrderId($orderId);
+
+        if (!$order) {
+            throw new OrderNotFoundException($orderId);
+        }
+
+        return $order;
+    }
+
+    private function getUser(int $userId): User
+    {
+        $user = $this->userRepository->getUserById($userId);
+
+        if (!$user) {
+            throw new UserNotFoundException();
+        }
+
+        return $user;
     }
 }

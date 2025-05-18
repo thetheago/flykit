@@ -16,14 +16,16 @@ class OrderAuthorizationValidator implements OrderAuthorizationValidatorInterfac
         $orderBelongsToUser = $order->belongsToUser($user->id);
         $userIsAdmin = $user->isAdmin();
 
-        if (!$userIsAdmin) {
-            if (!$orderBelongsToUser) {
-                throw new AccessDeniedException('Your user cannot update this order.');
-            }
+        if ($userIsAdmin) {
+            return;
+        }
 
-            if ($orderBelongsToUser && $newStatus !== $order->status) {
-                throw new AccessDeniedException('Users cannot update own orders status.');
-            }
+        if (!$orderBelongsToUser) {
+            throw new AccessDeniedException('Your user cannot update this order.');
+        }
+
+        if ($orderBelongsToUser && $newStatus !== $order->status) {
+            throw new AccessDeniedException('Users cannot update own orders status.');
         }
     }
 } 
