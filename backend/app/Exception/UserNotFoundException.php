@@ -11,6 +11,6 @@ class UserNotFoundException extends CustomException
 {
     public function __construct()
     {
-        parent::__construct(message: 'Usuário não encontrado.', code: Response::HTTP_NOT_FOUND);
+        parent::__construct(message: 'User not found.', code: Response::HTTP_NOT_FOUND);
     }
 }

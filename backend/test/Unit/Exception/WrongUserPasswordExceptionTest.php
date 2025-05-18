@@ -19,7 +19,7 @@ class WrongUserPasswordExceptionTest extends TestCase
     public function testWrongUserPasswordExceptionMessage()
     {
         $this->expectException(WrongUserPasswordException::class);
-        $this->expectExceptionMessage('Senha incorreta.');
+        $this->expectExceptionMessage('Wrong password.');
         throw new WrongUserPasswordException();
     }
 

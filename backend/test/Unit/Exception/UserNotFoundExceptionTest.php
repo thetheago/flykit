@@ -19,7 +19,7 @@ class UserNotFoundExceptionTest extends TestCase
     public function testUserNotFoundExceptionMessage()
     {
         $this->expectException(UserNotFoundException::class);
-        $this->expectExceptionMessage('Usuário não encontrado.');
+        $this->expectExceptionMessage('User not found.');
         throw new UserNotFoundException();
     }
 
