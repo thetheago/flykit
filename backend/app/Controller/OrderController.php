@@ -50,10 +50,8 @@ class OrderController
             userRepository: $this->userRepository,
             orderAuthorizationValidator: $this->orderAuthorizationValidator
         );
-        $output = $usecase->execute($input);
+        $usecase->execute($input);
 
-        return (new Response())->json(['joia uai' => '1'])->withStatus(HttpResponse::HTTP_OK);
-
-        // $output = $usecase->execute($input);
+        return (new Response())->withStatus(HttpResponse::HTTP_NO_CONTENT);
     }
 }
