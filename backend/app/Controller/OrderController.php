@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Factory\{ListAllOrderOutputFactory, OrderCreateInputFactory, OrderUpdateInputFactory};
+use App\Factory\{ListAllOrderInputFactory, ListAllOrderOutputFactory, OrderCreateInputFactory, OrderUpdateInputFactory};
 use App\Interfaces\{
     OrderAuthorizationValidatorInterface,
     OrderRepositoryInterface,
     UserRepositoryInterface
 };
-use App\Request\{OrderCreateRequest, OrderUpdateRequest};
+use App\Request\{ListAllOrderRequest, OrderCreateRequest, OrderUpdateRequest};
 use App\Usecase\{CreateOrderUsecase, ListAllOrderUsecase, UpdateOrderUsecase};
 use Hyperf\Contract\ContainerInterface;
 use Hyperf\Di\Annotation\Inject;
@@ -30,6 +30,9 @@ class OrderController
 
     #[Inject]
     private OrderUpdateInputFactory $orderUpdateInputFactory;
+
+    #[Inject]
+    private ListAllOrderInputFactory $listAllOrderInputFactory;
 
     #[Inject]
     private ListAllOrderOutputFactory $listAllOrderOutputFactory;
@@ -62,10 +65,9 @@ class OrderController
         return (new Response())->withStatus(HttpResponse::HTTP_NO_CONTENT);
     }
 
-    public function list()
+    public function list(ListAllOrderRequest $request)
     {
-        $user = $this->container->get('user');
-        $userId = (int) $user->id;
+        $input = $this->listAllOrderInputFactory->createFromRequest($request, $this->container);
 
         $usecase = new ListAllOrderUsecase(
             orderRepository: $this->orderRepository,
@@ -74,7 +76,7 @@ class OrderController
             listAllOrderOutputFactory: $this->listAllOrderOutputFactory
         );
 
-        $output = $usecase->execute($userId);
+        $output = $usecase->execute($input);
         return (new Response())->json($output->getOrders())->withStatus(HttpResponse::HTTP_OK);
     }
 }

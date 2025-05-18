@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Usecase;
 
-use App\Dto\Order\ListAllOrderOutput;
+use App\Dto\Order\{ListAllOrderInput, ListAllOrderOutput};
 use App\Exception\UserNotFoundException;
 use App\Factory\ListAllOrderOutputFactory;
 use App\Interfaces\{
@@ -23,8 +23,9 @@ class ListAllOrderUsecase
     )
     {}
 
-    public function execute(int $userId): ListAllOrderOutput
+    public function execute(ListAllOrderInput $input): ListAllOrderOutput
     {
+        $userId = $input->getUserId();
         $user = $this->userRepository->getUserById($userId);
 
         if (!$user) {
@@ -34,9 +35,9 @@ class ListAllOrderUsecase
         $userCanListAllOrders = $this->orderAuthorizationValidator->canUserListAllOrders($user);
 
         if ($userCanListAllOrders) {
-            $orders = $this->orderRepository->findAll();
+            $orders = $this->orderRepository->findAll($input);
         } else {
-            $orders = $this->orderRepository->findAllByUserId($userId);
+            $orders = $this->orderRepository->findAllByUserId($userId, $input);
         }
 
         return $this->listAllOrderOutputFactory->createFromModelCollection($orders);

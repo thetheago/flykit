@@ -7,6 +7,8 @@ namespace App\Repositories;
 use App\Dto\Order\OrderCreateInput;
 use App\Model\Order;
 use App\Interfaces\OrderRepositoryInterface;
+use App\Interfaces\ListOrderFilterDTO;
+use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\Collection;
 
 class OrderRepository implements OrderRepositoryInterface
@@ -34,19 +36,48 @@ class OrderRepository implements OrderRepositoryInterface
         $order->update($changesToUpdate);
     }
 
-    /**
-     * @return Collection<Order>
-     */
-    public function findAllByUserId(int $userId): Collection
+    public function getQueryBuilderToFindAll(ListOrderFilterDTO $filter): Builder
     {
-        return Order::where('user_id', $userId)->get();
+        $queryBuilder = Order::query();
+
+        $status = $filter->getStatus();
+        $departureDate = $filter->getDepartureDate();
+        $arrivalDate = $filter->getArrivalDate();
+        $destination = $filter->getDestination();
+
+        if ($status) {
+            $queryBuilder->where('status', $status);
+        }
+
+        if ($departureDate && $arrivalDate) {
+            $queryBuilder
+                ->where('departure_date', '>=', $departureDate->format('Y-m-d'))
+                ->where('arrival_date', '<=', $arrivalDate->format('Y-m-d'));
+        }
+
+        if ($destination) {
+            $queryBuilder->where('destination', $destination);
+        }
+
+        return $queryBuilder;
     }
 
     /**
      * @return Collection<Order>
      */
-    public function findAll(): Collection
+    public function findAllByUserId(int $userId, ListOrderFilterDTO $filter): Collection
     {
-        return Order::all();
+        $queryBuilder = $this->getQueryBuilderToFindAll($filter);
+        $queryBuilder->where('user_id', $userId);
+        return $queryBuilder->get();
+    }
+
+    /**
+     * @return Collection<Order>
+     */
+    public function findAll(ListOrderFilterDTO $filter): Collection
+    {
+        $queryBuilder = $this->getQueryBuilderToFindAll($filter);
+        return $queryBuilder->get();
     }
 }
