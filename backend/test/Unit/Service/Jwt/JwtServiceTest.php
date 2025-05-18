@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Jwt;
+namespace HyperfTest\Unit\Service\Jwt;
 
 use Hyperf\Testing\TestCase;
 use App\Service\Jwt\{JwtToken, JwtService};

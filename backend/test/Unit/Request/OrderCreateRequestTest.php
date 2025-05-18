@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Unit\Request;
+namespace HyperfTest\Unit\Request;
 
 use App\Request\OrderCreateRequest;
 use Hyperf\Testing\TestCase;
@@ -51,7 +51,6 @@ class OrderCreateRequestTest extends TestCase
         $this->assertArrayHasKey('status.required', $messages);
         $this->assertArrayHasKey('status.in', $messages);
 
-        // Test message content
         $this->assertEquals('O campo orderId é obrigatório.', $messages['orderId.required']);
         $this->assertEquals('O campo orderId deve ser um número.', $messages['orderId.numeric']);
         $this->assertEquals('O campo requesterName é obrigatório.', $messages['requesterName.required']);

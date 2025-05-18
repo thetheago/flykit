@@ -27,4 +27,9 @@ class OrderRepository implements OrderRepositoryInterface
             'user_id' => $input->getUserId(),
         ]);
     }
+
+    public function update(Order $order, array $changesToUpdate): void
+    {
+        $order->update($changesToUpdate);
+    }
 }

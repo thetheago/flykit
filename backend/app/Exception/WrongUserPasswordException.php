@@ -11,6 +11,6 @@ class WrongUserPasswordException extends CustomException
 {
     public function __construct()
     {
-        parent::__construct(message: 'Senha incorreta.', code: Response::HTTP_UNAUTHORIZED);
+        parent::__construct(message: 'Wrong password.', code: Response::HTTP_UNAUTHORIZED);
     }
 }

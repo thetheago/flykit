@@ -19,7 +19,7 @@ class WrongAccessAttemptExceptionTest extends TestCase
     public function testWrongAccessAttemptExceptionMessage()
     {
         $this->expectException(WrongAccessAttemptException::class);
-        $this->expectExceptionMessage('Tentativa de acesso inválida.');
+        $this->expectExceptionMessage('Invalid access attempt.');
         throw new WrongAccessAttemptException();
     }
 

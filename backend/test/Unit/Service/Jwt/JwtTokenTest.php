@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Jwt;
+namespace HyperfTest\Unit\Service\Jwt;
 
+use App\Service\Jwt\JwtToken;
 use Hyperf\Testing\TestCase;
 
 class JwtTokenTest extends TestCase

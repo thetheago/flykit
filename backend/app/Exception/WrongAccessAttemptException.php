@@ -11,6 +11,6 @@ class WrongAccessAttemptException extends CustomException
 {
     public function __construct()
     {
-        parent::__construct(message: 'Tentativa de acesso inválida.', code: Response::HTTP_UNAUTHORIZED);
+        parent::__construct(message: 'Invalid access attempt.', code: Response::HTTP_UNAUTHORIZED);
     }
 }

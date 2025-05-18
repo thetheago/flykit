@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Constants\OrderStatus;
 use App\Model\Order;
 use Hyperf\Database\Seeders\Seeder;
 
@@ -17,7 +18,7 @@ class OrderSeeder extends Seeder
         Order::create([
             'order_id' => 1234,
             'user_id' => 1,
-            'status' => 'pending',
+            'status' => OrderStatus::REQUESTED,
             'requester_name' => 'Peter pan',
             'destination' => 'Ilha do nunca',
             'departure_date' => '2025-01-01',

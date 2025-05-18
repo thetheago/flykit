@@ -32,4 +32,9 @@ class User extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = ['id' => 'integer', 'is_admin' => 'boolean', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+
+    public function isAdmin(): bool
+    {
+        return (bool) $this->is_admin;
+    }
 }
