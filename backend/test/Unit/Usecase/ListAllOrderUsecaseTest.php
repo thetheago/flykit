@@ -2,6 +2,7 @@
 
 namespace HyperfTest\Unit\Usecase;
 
+use App\Dto\Order\ListAllOrderInput;
 use App\Dto\Order\ListAllOrderOutput;
 use App\Exception\UserNotFoundException;
 use App\Factory\ListAllOrderOutputFactory;
@@ -27,8 +28,11 @@ class ListAllOrderUsecaseTest extends TestCase
         $userRepositoryMock = Mockery::mock(UserRepositoryInterface::class);
         $userRepositoryMock->shouldReceive('getUserById')->with($userId)->andReturn($userMock);
 
+        $listAllOrderInputMock = Mockery::mock(ListAllOrderInput::class);
+        $listAllOrderInputMock->shouldReceive('getUserId')->andReturn($userId);
+
         $orderRepositoryMock = Mockery::mock(OrderRepositoryInterface::class);
-        $orderRepositoryMock->shouldReceive('findAll')->andReturn(Collection::make([]));
+        $orderRepositoryMock->shouldReceive('findAll')->with($listAllOrderInputMock)->andReturn(Collection::make([]));
 
         $orderAuthorizationValidatorMock = Mockery::mock(OrderAuthorizationValidatorInterface::class);
         $orderAuthorizationValidatorMock->shouldReceive('canUserListAllOrders')->andReturn(true);
@@ -45,7 +49,7 @@ class ListAllOrderUsecaseTest extends TestCase
             $listAllOrderOutputFactoryMock
         );
 
-        $usecase->execute($userId);
+        $usecase->execute($listAllOrderInputMock);
 
         $orderRepositoryMock->shouldHaveReceived('findAll');
         $this->assertTrue(true);
@@ -60,8 +64,11 @@ class ListAllOrderUsecaseTest extends TestCase
         $userRepositoryMock = Mockery::mock(UserRepositoryInterface::class);
         $userRepositoryMock->shouldReceive('getUserById')->with($userId)->andReturn($userMock);
 
+        $listAllOrderInputMock = Mockery::mock(ListAllOrderInput::class);
+        $listAllOrderInputMock->shouldReceive('getUserId')->andReturn($userId);
+
         $orderRepositoryMock = Mockery::mock(OrderRepositoryInterface::class);
-        $orderRepositoryMock->shouldReceive('findAllByUserId')->with($userId)->andReturn(Collection::make([]));
+        $orderRepositoryMock->shouldReceive('findAllByUserId')->with($userId, $listAllOrderInputMock)->andReturn(Collection::make([]));
 
         $orderAuthorizationValidatorMock = Mockery::mock(OrderAuthorizationValidatorInterface::class);
         $orderAuthorizationValidatorMock->shouldReceive('canUserListAllOrders')->andReturn(false);
@@ -78,7 +85,7 @@ class ListAllOrderUsecaseTest extends TestCase
             $listAllOrderOutputFactoryMock
         );
 
-        $usecase->execute($userId);
+        $usecase->execute($listAllOrderInputMock);
 
         $orderRepositoryMock->shouldHaveReceived('findAllByUserId');
         $this->assertTrue(true);
@@ -95,6 +102,9 @@ class ListAllOrderUsecaseTest extends TestCase
         $orderAuthorizationValidatorMock = Mockery::mock(OrderAuthorizationValidatorInterface::class);
         $listAllOrderOutputFactoryMock = Mockery::mock(ListAllOrderOutputFactory::class);
 
+        $listAllOrderInputMock = Mockery::mock(ListAllOrderInput::class);
+        $listAllOrderInputMock->shouldReceive('getUserId')->andReturn($userId);
+
         $usecase = new ListAllOrderUsecase(
             $orderRepositoryMock,
             $userRepositoryMock,
@@ -103,6 +113,6 @@ class ListAllOrderUsecaseTest extends TestCase
         );
 
         $this->expectException(UserNotFoundException::class);
-        $usecase->execute($userId);
+        $usecase->execute($listAllOrderInputMock);
     }
 }
