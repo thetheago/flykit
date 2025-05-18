@@ -14,6 +14,8 @@ interface OrderRepositoryInterface
 {
     public function findByOrderId(int $orderId): ?Order;
 
+    public function findByOrderIdWithCheckUser(int $orderId, int $userId): ?Order;
+
     public function create(OrderCreateInput $input): Order;
 
     public function update(Order $order, array $changesToUpdate): void;
