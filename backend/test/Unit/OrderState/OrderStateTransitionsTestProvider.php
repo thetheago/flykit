@@ -1,14 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace HyperfTest\Unit\OrderState;
 
 use App\Constants\OrderStatus;
 use App\Exception\InvalidStateTransitionException;
-use Hyperf\Testing\TestCase;
 
-class OrderStateTestCase extends TestCase
+final class OrderStateTransitionsTestProvider
 {
     public static function approvedStateTransitionProvider(): array
     {

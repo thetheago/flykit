@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace App\OrderState;
 
 use App\Model\Order;
-use HyperfTest\Unit\OrderState\OrderStateTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
-use App\Test\Unit\OrderState\OrderStateTestDataProvider;
+use Hyperf\Testing\TestCase;
+use HyperfTest\Unit\OrderState\OrderStateTransitionsTestProvider;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 
-class OrderStateTransitionsTest extends OrderStateTestCase
+class OrderStateTransitionsTest extends TestCase
 {
     private Order $order;
 
@@ -21,9 +20,9 @@ class OrderStateTransitionsTest extends OrderStateTestCase
         $this->order = new Order();
     }
 
-    #[DataProvider('approvedStateTransitionProvider')]
-    #[DataProvider('requestedStateTransitionProvider')]
-    #[DataProvider('cancelledStateTransitionProvider')]
+    #[DataProviderExternal(OrderStateTransitionsTestProvider::class, 'approvedStateTransitionProvider')]
+    #[DataProviderExternal(OrderStateTransitionsTestProvider::class, 'requestedStateTransitionProvider')]
+    #[DataProviderExternal(OrderStateTransitionsTestProvider::class, 'cancelledStateTransitionProvider')]
     public function testStateTransitions(
         string $method,
         string $initialStatus,
