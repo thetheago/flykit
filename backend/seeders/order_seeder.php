@@ -17,7 +17,7 @@ class OrderSeeder extends Seeder
         Order::create([
             'order_id' => 1234,
             'user_id' => 1,
-            'status' => 'pending',
+            'status' => 'requested',
             'requester_name' => 'Peter pan',
             'destination' => 'Ilha do nunca',
             'departure_date' => '2025-01-01',

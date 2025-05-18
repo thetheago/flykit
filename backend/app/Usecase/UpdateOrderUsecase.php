@@ -48,10 +48,14 @@ class UpdateOrderUsecase
             newStatus: $input->getStatus()
         );
 
-        $changesToUpdate = [
-            'status' => $input->getStatus(),
-        ];
+        $newStatus = $input->getStatus();
+        match ($newStatus) {
+            'approved' => $order->approve(),
+            'requested' => $order->request(),
+            'cancelled' => $order->cancel(),
+            default => throw new \InvalidArgumentException("Invalid status: {$newStatus}")
+        };
 
-        $this->orderRepository->update(order: $order, changesToUpdate: $changesToUpdate);
+        $this->orderRepository->update(order: $order, changesToUpdate: ['status' => $order->status]);
     }
 }

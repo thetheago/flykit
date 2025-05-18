@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\OrderState\OrderStateFactory;
+use App\OrderState\OrderStateInterface;
 use Hyperf\DbConnection\Model\Model;
+use Hyperf\ModelListener\Annotation\ModelListener;
+use Hyperf\ModelListener\Contract\ModelListenerInterface;
 
 /**
  * @property int $id 
@@ -20,6 +24,8 @@ use Hyperf\DbConnection\Model\Model;
  */
 class Order extends Model
 {
+    private ?OrderStateInterface $state = null;
+
     /**
      * The table associated with the model.
      */
@@ -41,7 +47,13 @@ class Order extends Model
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = ['id' => 'integer', 'order_id' => 'integer', 'user_id' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+    protected array $casts = [
+        'id' => 'integer',
+        'order_id' => 'integer',
+        'user_id' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
 
     public function user()
     {
@@ -51,5 +63,31 @@ class Order extends Model
     public function belongsToUser(int $userId): bool
     {
         return $this->user_id === $userId;
+    }
+
+    public function initializeState(): void
+    {
+        $this->state = OrderStateFactory::createFromStatus($this->status);
+    }
+
+    public function setState(OrderStateInterface $state): void
+    {
+        $this->state = $state;
+        $this->status = $state->getStatus();
+    }
+
+    public function approve(): void
+    {
+        $this->state->approve($this);
+    }
+
+    public function request(): void
+    {
+        $this->state->request($this);
+    }
+
+    public function cancel(): void
+    {
+        $this->state->cancel($this);
     }
 }
