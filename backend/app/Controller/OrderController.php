@@ -23,6 +23,7 @@ use App\Request\{
     OrderCreateRequest,
     OrderUpdateRequest
 };
+use App\Service\AmqpMailSender;
 use App\Usecase\{
     CreateOrderUsecase,
     GetOrderUsecase,
@@ -65,6 +66,9 @@ class OrderController extends AbstractController
     #[Inject]
     private OrderAuthorizationValidatorInterface $orderAuthorizationValidator;
 
+    #[Inject]
+    private AmqpMailSender $amqpMailSender;
+
     public function create(OrderCreateRequest $request)
     {
         $input = $this->orderCreateInputFactory->createFromRequest($request, $this->container);
@@ -81,7 +85,8 @@ class OrderController extends AbstractController
             orderRepository: $this->orderRepository,
             userRepository: $this->userRepository,
             orderAuthorizationValidator: $this->orderAuthorizationValidator,
-            orderUpdateOutputFactory: $this->orderUpdateOutputFactory
+            orderUpdateOutputFactory: $this->orderUpdateOutputFactory,
+            amqpMailSender: $this->amqpMailSender
         );
         $output = $usecase->execute($input);
 

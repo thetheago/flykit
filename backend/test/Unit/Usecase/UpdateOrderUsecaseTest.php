@@ -15,6 +15,7 @@ use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Model\Order;
 use App\Model\User;
+use App\Service\AmqpMailSender;
 use Hyperf\Testing\TestCase;
 use App\Usecase\UpdateOrderUsecase;
 use InvalidArgumentException;
@@ -27,6 +28,7 @@ class UpdateOrderUsecaseTest extends TestCase
     private \Mockery\LegacyMockInterface&\Mockery\MockInterface&\App\Interfaces\UserRepositoryInterface $userRepository;
     private \Mockery\LegacyMockInterface&\Mockery\MockInterface&\App\Interfaces\OrderAuthorizationValidatorInterface $orderAuthorizationValidator;
     private \Mockery\LegacyMockInterface&\Mockery\MockInterface&\App\Factory\OrderUpdateOutputFactory $orderUpdateOutputFactory;
+    private \Mockery\LegacyMockInterface&\Mockery\MockInterface&\App\Service\AmqpMailSender $amqpMailSender;
 
     public function setUp(): void
     {
@@ -36,6 +38,7 @@ class UpdateOrderUsecaseTest extends TestCase
         $this->userRepository = Mockery::mock(UserRepositoryInterface::class);
         $this->orderAuthorizationValidator = Mockery::mock(OrderAuthorizationValidatorInterface::class);
         $this->orderUpdateOutputFactory = Mockery::mock(OrderUpdateOutputFactory::class);
+        $this->amqpMailSender = Mockery::mock(AmqpMailSender::class);
     }
 
     public function tearDown(): void
@@ -75,7 +78,7 @@ class UpdateOrderUsecaseTest extends TestCase
         $orderModelMock->shouldReceive('getAttribute')->with('status')->andReturn($expectedStatus);
 
         $this->orderRepository->shouldReceive('findByOrderId')->andReturn($orderModelMock);
-        $this->orderRepository->shouldReceive('update');
+        $this->orderRepository->shouldReceive('update')->andReturn($orderModelMock);
 
         $userModelMock = Mockery::mock(User::class);
 
@@ -91,7 +94,8 @@ class UpdateOrderUsecaseTest extends TestCase
             $this->orderRepository,
             $this->userRepository,
             $this->orderAuthorizationValidator,
-            $this->orderUpdateOutputFactory
+            $this->orderUpdateOutputFactory,
+            $this->amqpMailSender
         );
         
         $orderUpdateInputMock = Mockery::mock(OrderUpdateInput::class);
@@ -117,7 +121,8 @@ class UpdateOrderUsecaseTest extends TestCase
             $this->orderRepository,
             $this->userRepository,
             $this->orderAuthorizationValidator,
-            $this->orderUpdateOutputFactory
+            $this->orderUpdateOutputFactory,
+            $this->amqpMailSender
         );
         
         $orderUpdateInputMock = Mockery::mock(OrderUpdateInput::class);
@@ -148,7 +153,8 @@ class UpdateOrderUsecaseTest extends TestCase
             $this->orderRepository,
             $this->userRepository,
             $this->orderAuthorizationValidator,
-            $this->orderUpdateOutputFactory
+            $this->orderUpdateOutputFactory,
+            $this->amqpMailSender
         );
         
         $orderUpdateInputMock = Mockery::mock(OrderUpdateInput::class);
@@ -165,13 +171,17 @@ class UpdateOrderUsecaseTest extends TestCase
 
     public function testUpdateOrderUsecaseWithInvalidStatus()
     {
+        $status = 'Status qualquer';
+
         $orderModelMock = Mockery::mock(Order::class);
+        $orderModelMock->shouldReceive('getAttribute')->with('status')->andReturn($status);
 
         $this->orderRepository->shouldReceive('findByOrderId')->andReturn($orderModelMock);
 
         $userModelMock = Mockery::mock(User::class);
 
         $this->userRepository->shouldReceive('getUserById')->andReturn($userModelMock);
+        
 
         $this->orderAuthorizationValidator->shouldReceive('validateOrderUpdate')->andReturn(true);
 
@@ -183,10 +193,9 @@ class UpdateOrderUsecaseTest extends TestCase
             $this->orderRepository,
             $this->userRepository,
             $this->orderAuthorizationValidator,
-            $this->orderUpdateOutputFactory
+            $this->orderUpdateOutputFactory,
+            $this->amqpMailSender
         );
-        
-        $status = 'Status qualquer';
 
         $orderUpdateInputMock = Mockery::mock(OrderUpdateInput::class);
         $orderUpdateInputMock->shouldReceive('getOrderId')->andReturn(1);
@@ -198,6 +207,94 @@ class UpdateOrderUsecaseTest extends TestCase
 
         $updateOrderUsecase->execute($orderUpdateInputMock);
 
+        $this->assertTrue(true);
+    }
+
+    public function testUpdateOrderUsecaseWithMailNotificationRequestedToApproved()
+    {
+        $orderModelMock = Mockery::mock(Order::class);
+        $orderModelMock->shouldReceive('approve');
+        $orderModelMock->shouldReceive('getAttribute')->with('status')->andReturn(OrderStatus::REQUESTED);
+
+        $orderModelMockAfterUpdate = Mockery::mock(Order::class);
+        $orderModelMockAfterUpdate->shouldReceive('getAttribute')->with('status')->andReturn(OrderStatus::APPROVED);
+
+        $this->orderRepository->shouldReceive('findByOrderId')->andReturn($orderModelMock);
+        $this->orderRepository->shouldReceive('update')->andReturn($orderModelMockAfterUpdate);
+
+        $userModelMock = Mockery::mock(User::class);
+        $userModelMock->shouldReceive('getAttribute')->with('email')->andReturn('lilo@stitch.com');
+
+        $this->userRepository->shouldReceive('getUserById')->andReturn($userModelMock);
+
+        $this->orderAuthorizationValidator->shouldReceive('validateOrderUpdate')->andReturn(true);
+
+        $orderUpdateOutputMock = Mockery::mock(OrderUpdateOutput::class);
+
+        $this->orderUpdateOutputFactory->shouldReceive('createFromOrderModel')->andReturn($orderUpdateOutputMock);
+
+        $this->amqpMailSender->shouldReceive('sendMail');
+
+        $updateOrderUsecase = new UpdateOrderUsecase(
+            $this->orderRepository,
+            $this->userRepository,
+            $this->orderAuthorizationValidator,
+            $this->orderUpdateOutputFactory,
+            $this->amqpMailSender
+        );
+        
+        $orderUpdateInputMock = Mockery::mock(OrderUpdateInput::class);
+        $orderUpdateInputMock->shouldReceive('getOrderId')->andReturn(1);
+        $orderUpdateInputMock->shouldReceive('getUserId')->andReturn(1);
+        $orderUpdateInputMock->shouldReceive('getStatus')->andReturn(OrderStatus::APPROVED);
+
+        $updateOrderUsecase->execute($orderUpdateInputMock);
+
+        $this->amqpMailSender->shouldHaveReceived('sendMail');
+        $this->assertTrue(true);
+    }
+
+    public function testUpdateOrderUsecaseWithMailNotificationRequestedToCancelled()
+    {
+        $orderModelMock = Mockery::mock(Order::class);
+        $orderModelMock->shouldReceive('cancel');
+        $orderModelMock->shouldReceive('getAttribute')->with('status')->andReturn(OrderStatus::REQUESTED);
+
+        $orderModelMockAfterUpdate = Mockery::mock(Order::class);
+        $orderModelMockAfterUpdate->shouldReceive('getAttribute')->with('status')->andReturn(OrderStatus::CANCELLED);
+
+        $this->orderRepository->shouldReceive('findByOrderId')->andReturn($orderModelMock);
+        $this->orderRepository->shouldReceive('update')->andReturn($orderModelMockAfterUpdate);
+
+        $userModelMock = Mockery::mock(User::class);
+        $userModelMock->shouldReceive('getAttribute')->with('email')->andReturn('lilo@stitch.com');
+
+        $this->userRepository->shouldReceive('getUserById')->andReturn($userModelMock);
+
+        $this->orderAuthorizationValidator->shouldReceive('validateOrderUpdate')->andReturn(true);
+
+        $orderUpdateOutputMock = Mockery::mock(OrderUpdateOutput::class);
+
+        $this->orderUpdateOutputFactory->shouldReceive('createFromOrderModel')->andReturn($orderUpdateOutputMock);
+
+        $this->amqpMailSender->shouldReceive('sendMail');
+
+        $updateOrderUsecase = new UpdateOrderUsecase(
+            $this->orderRepository,
+            $this->userRepository,
+            $this->orderAuthorizationValidator,
+            $this->orderUpdateOutputFactory,
+            $this->amqpMailSender
+        );
+        
+        $orderUpdateInputMock = Mockery::mock(OrderUpdateInput::class);
+        $orderUpdateInputMock->shouldReceive('getOrderId')->andReturn(1);
+        $orderUpdateInputMock->shouldReceive('getUserId')->andReturn(1);
+        $orderUpdateInputMock->shouldReceive('getStatus')->andReturn(OrderStatus::CANCELLED);
+
+        $updateOrderUsecase->execute($orderUpdateInputMock);
+
+        $this->amqpMailSender->shouldHaveReceived('sendMail');
         $this->assertTrue(true);
     }
 }

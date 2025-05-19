@@ -26,6 +26,7 @@
       <file>./app/Factory/OrderCreateInputFactory.php</file>
       <file>./app/Factory/OrderUpdateInputFactory.php</file>
       <file>./app/Exception/BusinessException.php</file>
+      <file>./app/Service/AmqpMailSender.php</file>
     </exclude>
   </source>
 </phpunit>

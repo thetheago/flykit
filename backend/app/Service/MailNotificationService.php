@@ -6,16 +6,17 @@ namespace App\Service;
 
 use App\Interfaces\NotificationServiceInterface;
 use Hyperf\Guzzle\ClientFactory;
-use Hyperf\Di\Annotation\Inject;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
 
 class MailNotificationService implements NotificationServiceInterface
 {
-    #[Inject]
-    protected ClientFactory $clientFactory;
+    public function __construct(
+        protected ClientFactory $clientFactory
+    ) {
+    }
 
-    public function sendNotification(string $message): void
+    public function sendNotification(string $email, string $subject, string $body): void
     {
         $client = $this->clientFactory->create();
         $response = $client->post('https://util.devi.tools/api/v1/notify', ['http_errors' => false]);

@@ -10,8 +10,15 @@ use Hyperf\Amqp\Message\ProducerMessage;
 #[Producer(exchange: 'hyperf', routingKey: 'email.send')]
 class MailProducer extends ProducerMessage
 {
-    public function __construct($data)
-    {
-        $this->payload = $data;
+    public function __construct(
+        public string $email,
+        public string $subject,
+        public string $body,
+    ) {
+        $this->payload = [
+            'email' => $email,
+            'subject' => $subject,
+            'body' => $body,
+        ];
     }
 }

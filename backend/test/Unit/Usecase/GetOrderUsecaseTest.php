@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Unit\Usecase;
+namespace HyperfTest\Unit\Usecase;
 
 use App\Dto\Order\GetOrderInput;
 use App\Dto\Order\GetOrderOutput;
