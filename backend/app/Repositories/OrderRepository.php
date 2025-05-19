@@ -37,9 +37,13 @@ class OrderRepository implements OrderRepositoryInterface
         ]);
     }
 
-    public function update(Order $order, array $changesToUpdate): void
+    public function update(Order &$order, array $changesToUpdate): void
     {
-        $order->update($changesToUpdate);
+        $order->fill($changesToUpdate);
+
+        if ($order->isDirty()) {
+            $order->save();
+        }
     }
 
     public function getQueryBuilderToFindAll(ListOrderFilterDTO $filter): Builder

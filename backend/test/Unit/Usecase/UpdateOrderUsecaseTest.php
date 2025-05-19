@@ -6,8 +6,10 @@ namespace HyperfTest\Unit\Usecase;
 
 use App\Constants\OrderStatus;
 use App\Dto\Order\OrderUpdateInput;
+use App\Dto\Order\OrderUpdateOutput;
 use App\Exception\OrderNotFoundException;
 use App\Exception\UserNotFoundException;
+use App\Factory\OrderUpdateOutputFactory;
 use App\Interfaces\OrderAuthorizationValidatorInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
@@ -24,6 +26,7 @@ class UpdateOrderUsecaseTest extends TestCase
     private \Mockery\LegacyMockInterface&\Mockery\MockInterface&\App\Interfaces\OrderRepositoryInterface $orderRepository;
     private \Mockery\LegacyMockInterface&\Mockery\MockInterface&\App\Interfaces\UserRepositoryInterface $userRepository;
     private \Mockery\LegacyMockInterface&\Mockery\MockInterface&\App\Interfaces\OrderAuthorizationValidatorInterface $orderAuthorizationValidator;
+    private \Mockery\LegacyMockInterface&\Mockery\MockInterface&\App\Factory\OrderUpdateOutputFactory $orderUpdateOutputFactory;
 
     public function setUp(): void
     {
@@ -32,6 +35,7 @@ class UpdateOrderUsecaseTest extends TestCase
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->userRepository = Mockery::mock(UserRepositoryInterface::class);
         $this->orderAuthorizationValidator = Mockery::mock(OrderAuthorizationValidatorInterface::class);
+        $this->orderUpdateOutputFactory = Mockery::mock(OrderUpdateOutputFactory::class);
     }
 
     public function tearDown(): void
@@ -79,10 +83,15 @@ class UpdateOrderUsecaseTest extends TestCase
 
         $this->orderAuthorizationValidator->shouldReceive('validateOrderUpdate')->andReturn(true);
 
+        $orderUpdateOutputMock = Mockery::mock(OrderUpdateOutput::class);
+
+        $this->orderUpdateOutputFactory->shouldReceive('createFromOrderModel')->andReturn($orderUpdateOutputMock);
+
         $updateOrderUsecase = new UpdateOrderUsecase(
             $this->orderRepository,
             $this->userRepository,
-            $this->orderAuthorizationValidator
+            $this->orderAuthorizationValidator,
+            $this->orderUpdateOutputFactory
         );
         
         $orderUpdateInputMock = Mockery::mock(OrderUpdateInput::class);
@@ -100,10 +109,15 @@ class UpdateOrderUsecaseTest extends TestCase
         $this->orderRepository->shouldReceive('findByOrderId')->andReturn(null);
         $this->orderRepository->shouldReceive('update');
 
+        $orderUpdateOutputMock = Mockery::mock(OrderUpdateOutput::class);
+
+        $this->orderUpdateOutputFactory->shouldReceive('createFromOrderModel')->andReturn($orderUpdateOutputMock);
+
         $updateOrderUsecase = new UpdateOrderUsecase(
             $this->orderRepository,
             $this->userRepository,
-            $this->orderAuthorizationValidator
+            $this->orderAuthorizationValidator,
+            $this->orderUpdateOutputFactory
         );
         
         $orderUpdateInputMock = Mockery::mock(OrderUpdateInput::class);
@@ -126,10 +140,15 @@ class UpdateOrderUsecaseTest extends TestCase
 
         $this->userRepository->shouldReceive('getUserById')->andReturn(null);
 
+        $orderUpdateOutputMock = Mockery::mock(OrderUpdateOutput::class);
+
+        $this->orderUpdateOutputFactory->shouldReceive('createFromOrderModel')->andReturn($orderUpdateOutputMock);
+
         $updateOrderUsecase = new UpdateOrderUsecase(
             $this->orderRepository,
             $this->userRepository,
-            $this->orderAuthorizationValidator
+            $this->orderAuthorizationValidator,
+            $this->orderUpdateOutputFactory
         );
         
         $orderUpdateInputMock = Mockery::mock(OrderUpdateInput::class);
@@ -156,10 +175,15 @@ class UpdateOrderUsecaseTest extends TestCase
 
         $this->orderAuthorizationValidator->shouldReceive('validateOrderUpdate')->andReturn(true);
 
+        $orderUpdateOutputMock = Mockery::mock(OrderUpdateOutput::class);
+
+        $this->orderUpdateOutputFactory->shouldReceive('createFromOrderModel')->andReturn($orderUpdateOutputMock);
+
         $updateOrderUsecase = new UpdateOrderUsecase(
             $this->orderRepository,
             $this->userRepository,
-            $this->orderAuthorizationValidator
+            $this->orderAuthorizationValidator,
+            $this->orderUpdateOutputFactory
         );
         
         $status = 'Status qualquer';

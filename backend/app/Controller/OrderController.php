@@ -10,7 +10,8 @@ use App\Factory\{
     ListAllOrderInputFactory,
     ListAllOrderOutputFactory,
     OrderCreateInputFactory,
-    OrderUpdateInputFactory
+    OrderUpdateInputFactory,
+    OrderUpdateOutputFactory
 };
 use App\Interfaces\{
     OrderAuthorizationValidatorInterface,
@@ -47,6 +48,9 @@ class OrderController extends AbstractController
     private OrderUpdateInputFactory $orderUpdateInputFactory;
 
     #[Inject]
+    private OrderUpdateOutputFactory $orderUpdateOutputFactory;
+
+    #[Inject]
     private ListAllOrderInputFactory $listAllOrderInputFactory;
 
     #[Inject]
@@ -76,11 +80,12 @@ class OrderController extends AbstractController
         $usecase = new UpdateOrderUsecase(
             orderRepository: $this->orderRepository,
             userRepository: $this->userRepository,
-            orderAuthorizationValidator: $this->orderAuthorizationValidator
+            orderAuthorizationValidator: $this->orderAuthorizationValidator,
+            orderUpdateOutputFactory: $this->orderUpdateOutputFactory
         );
-        $usecase->execute($input);
+        $output = $usecase->execute($input);
 
-        return (new Response())->withStatus(HttpResponse::HTTP_NO_CONTENT);
+        return (new Response())->json($output->toArray())->withStatus(HttpResponse::HTTP_OK);
     }
 
     public function list(ListAllOrderRequest $request)
