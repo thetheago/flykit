@@ -12,7 +12,7 @@ use Hyperf\ModelListener\Contract\ModelListenerInterface;
 
 /**
  * @property int $id 
- * @property int $order_number 
+ * @property int $order_id 
  * @property string $requester_name 
  * @property string $destination 
  * @property string $departure_date 
