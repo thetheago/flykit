@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use Hyperf\Database\Seeders\Seeder;
 use App\Constants\OrderStatus;
 use App\Model\Order;
-use Hyperf\Database\Seeders\Seeder;
 
-class OrderSeeder extends Seeder
+class AaOrderSeeder extends Seeder
 {
     /**
      * Run the database seeds.
