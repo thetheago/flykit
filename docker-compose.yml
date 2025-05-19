@@ -11,7 +11,8 @@ services:
     ports:
       - 9501:9501
     command: >
-        sh -c "cp .env.example .env &&
+        sh -c "ulimit -c 0 &&
+                cp .env.example .env &&
                 composer install &&
                 composer dump-autoload &&
                 php bin/hyperf.php migrate &&
@@ -21,8 +22,26 @@ services:
     depends_on:
       flykit-db:
         condition: service_healthy
+      flykit-rabbitmq:
+        condition: service_started
     stop_signal: SIGTERM
     stop_grace_period: 30s
+
+  flykit-consumer:
+    container_name: flykit-consumer
+    build:
+      context: ./backend/docker
+    volumes:
+      - ./backend:/data/project
+    command: >
+        sh -c "cp .env.example .env && ulimit -c 0 && php bin/hyperf.php start"
+    networks:
+      - flykit
+    depends_on:
+      flykit-db:
+        condition: service_healthy
+      flykit-rabbitmq:
+        condition: service_started
 
   flykit-db:
     image: mysql:8.0
@@ -45,8 +64,24 @@ services:
       timeout: 5s
       retries: 5
 
+  flykit-rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: flykit-rabbitmq
+    # hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=root
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+    networks:
+      - flykit
+
 volumes:
   mysql_data:
+  rabbitmq_data:
 
 networks:
   flykit:

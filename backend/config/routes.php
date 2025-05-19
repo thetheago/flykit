@@ -10,8 +10,6 @@ use App\Controller\{
 use App\Middleware\AuthMiddleware;
 use Hyperf\HttpServer\Router\Router;
 
-Router::addRoute(['GET', 'POST', 'HEAD'], '/', [IndexController::class, 'index']);
-
 Router::post('/login', [AuthController::class, 'login']);
 
 Router::addGroup('/v1', function () {

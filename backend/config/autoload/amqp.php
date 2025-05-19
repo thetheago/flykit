@@ -25,7 +25,7 @@ return [
             'read_write_timeout' => 6,
             'context' => null,
             'keepalive' => true,
-            'heartbeat' => 3,
+            'heartbeat' => 30,
             'channel_rpc_timeout' => 0.0,
             'close_on_destruct' => false,
             'max_idle_channels' => 10,

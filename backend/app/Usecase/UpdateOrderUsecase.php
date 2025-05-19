@@ -15,6 +15,7 @@ use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Model\Order;
 use App\Model\User;
+use App\Service\AmqpMailSender;
 use InvalidArgumentException;
 
 class UpdateOrderUsecase
@@ -23,17 +24,20 @@ class UpdateOrderUsecase
     private UserRepositoryInterface $userRepository;
     private OrderAuthorizationValidatorInterface $orderAuthorizationValidator;
     private OrderUpdateOutputFactory $orderUpdateOutputFactory;
+    private AmqpMailSender $amqpMailSender;
 
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         UserRepositoryInterface $userRepository,
         OrderAuthorizationValidatorInterface $orderAuthorizationValidator,
-        OrderUpdateOutputFactory $orderUpdateOutputFactory
+        OrderUpdateOutputFactory $orderUpdateOutputFactory,
+        AmqpMailSender $amqpMailSender
     ) {
         $this->orderRepository = $orderRepository;
         $this->userRepository = $userRepository;
         $this->orderAuthorizationValidator = $orderAuthorizationValidator;
         $this->orderUpdateOutputFactory = $orderUpdateOutputFactory;
+        $this->amqpMailSender = $amqpMailSender;
     }
 
     public function execute(OrderUpdateInput $input): OrderUpdateOutput
@@ -50,6 +54,8 @@ class UpdateOrderUsecase
             newStatus: $input->getStatus()
         );
 
+        $statusBeforeUpdate = $order->status;
+
         $newStatus = $input->getStatus();
         match ($newStatus) {
             OrderStatus::APPROVED => $order->approve(),
@@ -58,7 +64,20 @@ class UpdateOrderUsecase
             default => throw new InvalidArgumentException("Invalid status: $newStatus")
         };
 
-        $this->orderRepository->update(order: $order, changesToUpdate: ['status' => $order->status]);
+        $updatedOrder = $this->orderRepository->update(order: $order, changesToUpdate: ['status' => $order->status]);
+
+        $statusAfterUpdate = $updatedOrder->status;
+
+        if (
+            ($statusBeforeUpdate !== $statusAfterUpdate) &&
+            ($statusAfterUpdate === OrderStatus::APPROVED || $statusAfterUpdate === OrderStatus::CANCELLED)
+        ) {
+            $this->amqpMailSender->sendMail(
+                email: $user->email,
+                subject: 'Order status updated',
+                body: "The order $orderId status has been updated to $statusAfterUpdate"
+            );
+        }
 
         return $this->orderUpdateOutputFactory->createFromOrderModel($order);
     }

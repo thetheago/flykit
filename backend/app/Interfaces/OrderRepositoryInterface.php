@@ -18,7 +18,7 @@ interface OrderRepositoryInterface
 
     public function create(OrderCreateInput $input): Order;
 
-    public function update(Order &$order, array $changesToUpdate): void;
+    public function update(Order $order, array $changesToUpdate): Order;
 
     public function getQueryBuilderToFindAll(ListOrderFilterDTO $filter): Builder;
 

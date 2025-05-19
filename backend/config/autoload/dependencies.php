@@ -10,6 +10,8 @@ use App\Interfaces\{
 use App\Repositories\{UserRepository, OrderRepository};
 use App\Service\Jwt\JwtService;
 use App\Service\OrderAuthorizationValidator;
+use App\Service\MailNotificationService;
+use App\Interfaces\NotificationServiceInterface;
 
 /*
  * This file is part of Hyperf.
@@ -24,4 +26,5 @@ return [
     OrderRepositoryInterface::class => OrderRepository::class,
     AuthTokenInterface::class => JwtService::class,
     OrderAuthorizationValidatorInterface::class => OrderAuthorizationValidator::class,
+    NotificationServiceInterface::class => MailNotificationService::class,
 ];
