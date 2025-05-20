@@ -40,7 +40,12 @@ class LoginUseCase
             throw new WrongAccessAttemptException();
         }
 
-        $tokenPayload = new JwtToken(id: $user->id, email: $user->email, iat: time());
+        $tokenPayload = new JwtToken(
+            id: $user->id,
+            email: $user->email,
+            isAdmin: (bool) $user->is_admin,
+            iat: time()
+        );
 
         $token = $this->jwtService->generateToken($tokenPayload);
 
