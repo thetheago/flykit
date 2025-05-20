@@ -1,0 +1,12 @@
+{
+    "folders": [
+        {
+            "path": ".",
+            "name": "flykit-root"
+        },
+        {
+            "path": "frontend",
+            "name": "frontend"
+        }
+    ]
+} 
