@@ -79,6 +79,18 @@ services:
     networks:
       - flykit
 
+  flykit-frontend:
+    build:
+      context: ./frontend/docker
+    volumes:
+      - ./frontend:/var/www
+    container_name: flykit-frontend
+    ports:
+      - "9000:9000"
+    command: sh -c "npm install && npm run dev"
+    networks:
+      - flykit
+
 volumes:
   mysql_data:
   rabbitmq_data:
