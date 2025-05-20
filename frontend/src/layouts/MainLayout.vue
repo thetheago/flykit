@@ -12,10 +12,10 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Flykit
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>Quasar v{{ quasar.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -46,10 +46,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
+import { ref } from 'vue'
+import { useQuasar } from 'quasar'
+import EssentialLink from 'components/EssentialLink.vue'
 
-const linksList: EssentialLinkProps[] = [
+const quasar = useQuasar()
+const leftDrawerOpen = ref(false)
+
+const linksList = [
   {
     title: 'Docs',
     caption: 'quasar.dev',
@@ -92,11 +96,9 @@ const linksList: EssentialLinkProps[] = [
     icon: 'favorite',
     link: 'https://awesome.quasar.dev'
   }
-];
+]
 
-const leftDrawerOpen = ref(false);
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value
 }
 </script>
