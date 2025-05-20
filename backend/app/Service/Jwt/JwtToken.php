@@ -6,6 +6,8 @@ namespace App\Service\Jwt;
 
 class JwtToken
 {
+    public const EXPIRATION_TIME = 3600;
+
     public function __construct(
         private int $id,
         private string $email,
@@ -29,6 +31,11 @@ class JwtToken
         return $this->isAdmin;
     }
 
+    public function getExp(): int
+    {
+        return $this->iat + self::EXPIRATION_TIME;
+    }
+
     public function getIat(): int
     {
         return $this->iat;
@@ -40,6 +47,7 @@ class JwtToken
             'id' => $this->id,
             'email' => $this->email,
             'isAdmin' => $this->isAdmin,
+            'exp' => $this->getExp(),
             'iat' => $this->iat,
         ];
     }

@@ -7,6 +7,7 @@ namespace HyperfTest\Unit\Usecase;
 use App\Dto\Login\LoginInput;
 use App\Dto\Login\LoginOutput;
 use App\Exception\WrongAccessAttemptException;
+use App\Factory\LoginOutputFactory;
 use App\Interfaces\AuthTokenInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Model\User;
@@ -36,7 +37,16 @@ class LoginUseCaseTest extends TestCase
         $jwtServiceMock = Mockery::mock(AuthTokenInterface::class);
         $jwtServiceMock->shouldReceive('generateToken')->andReturn('token');
 
-        $loginUseCase = new LoginUseCase($userRepositoryMock, $jwtServiceMock);
+        $loginOutputMock = Mockery::mock(LoginOutput::class);
+
+        $loginOutputFactoryMock = Mockery::mock(LoginOutputFactory::class);
+        $loginOutputFactoryMock->shouldReceive('createFromLoginUseCase')->andReturn($loginOutputMock);
+
+        $loginUseCase = new LoginUseCase(
+            userRepository: $userRepositoryMock,
+            jwtService: $jwtServiceMock,
+            loginOutputFactory: $loginOutputFactoryMock,
+        );
         $loginOutput = $loginUseCase->execute($loginInputMock);
 
         $this->assertInstanceOf(LoginOutput::class, $loginOutput);
@@ -56,7 +66,13 @@ class LoginUseCaseTest extends TestCase
         $jwtServiceMock = Mockery::mock(AuthTokenInterface::class);
         $jwtServiceMock->shouldReceive('generateToken')->andReturn('token');
 
-        $loginUseCase = new LoginUseCase($userRepositoryMock, $jwtServiceMock);
+        $loginOutputFactoryMock = Mockery::mock(LoginOutputFactory::class);
+
+        $loginUseCase = new LoginUseCase(
+            userRepository: $userRepositoryMock,
+            jwtService: $jwtServiceMock,
+            loginOutputFactory: $loginOutputFactoryMock,
+        );
         $loginUseCase->execute($loginInputMock);
     }
 
@@ -83,7 +99,13 @@ class LoginUseCaseTest extends TestCase
         $jwtServiceMock = Mockery::mock(AuthTokenInterface::class);
         $jwtServiceMock->shouldReceive('generateToken')->andReturn('token');
 
-        $loginUseCase = new LoginUseCase($userRepositoryMock, $jwtServiceMock);
+        $loginOutputFactoryMock = Mockery::mock(LoginOutputFactory::class);
+
+        $loginUseCase = new LoginUseCase(
+            userRepository: $userRepositoryMock,
+            jwtService: $jwtServiceMock,
+            loginOutputFactory: $loginOutputFactoryMock,
+        );
         $loginUseCase->execute($loginInputMock);
     }
 }

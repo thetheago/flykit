@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Factory\LoginInputFactory;
+use App\Factory\LoginOutputFactory;
 use App\Interfaces\AuthTokenInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Request\LoginRequest;
 use App\Usecase\LoginUseCase;
 use Hyperf\Di\Annotation\Inject;
-use Hyperf\HttpServer\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Hyperf\HttpMessage\Cookie\Cookie;
+use Hyperf\HttpServer\Contract\ResponseInterface;
 
 class AuthController
 {
@@ -24,15 +26,29 @@ class AuthController
     #[Inject]
     private AuthTokenInterface $jwtService;
 
+    #[Inject]
+    private LoginOutputFactory $loginOutputFactory;
+
+    #[Inject]
+    private ResponseInterface $response;
+
     public function login(LoginRequest $request)
     {
         $input = $this->loginInputFactory->createFromRequest($request);
 
-        $loginUsecase = new LoginUseCase($this->userRepository, $this->jwtService);
+        $loginUsecase = new LoginUseCase(
+            userRepository: $this->userRepository,
+            jwtService: $this->jwtService,
+            loginOutputFactory: $this->loginOutputFactory,
+        );
         $output = $loginUsecase->execute($input);
 
-        return (new Response())->json([
-            'token' => $output->getToken(),
-        ])->withStatus(HttpResponse::HTTP_OK);
+        $cookie = new Cookie(
+            name: 'token',
+            value: $output->getToken(),
+            expire: $output->getExpirationTime()
+        );
+
+        return $this->response->withCookie($cookie)->withContent('')->withStatus(HttpResponse::HTTP_OK);
     }
 }

@@ -7,6 +7,7 @@ namespace App\Usecase;
 use App\Dto\Login\LoginInput;
 use App\Dto\Login\LoginOutput;
 use App\Exception\WrongAccessAttemptException;
+use App\Factory\LoginOutputFactory;
 use App\Interfaces\AuthTokenInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Service\Jwt\JwtToken;
@@ -17,12 +18,16 @@ class LoginUseCase
 
     protected UserRepositoryInterface $userRepository;
 
+    protected LoginOutputFactory $loginOutputFactory;
+
     public function __construct(
         UserRepositoryInterface $userRepository,
-        AuthTokenInterface $jwtService
+        AuthTokenInterface $jwtService,
+        LoginOutputFactory $loginOutputFactory
     ) {
         $this->userRepository = $userRepository;
         $this->jwtService = $jwtService;
+        $this->loginOutputFactory = $loginOutputFactory;
     }
 
     /**
@@ -49,6 +54,9 @@ class LoginUseCase
 
         $token = $this->jwtService->generateToken($tokenPayload);
 
-        return new LoginOutput($token);
+        return $this->loginOutputFactory->createFromLoginUseCase(
+            tokenPayload: $tokenPayload,
+            token: $token
+        );
     }
 }
