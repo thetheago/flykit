@@ -15,6 +15,17 @@
 
 - docker compose
 
+## 🪭 Acessos
+### 🍂 RabbitMQ (GUI) `http://localhost:15672`
+- user : admin
+- senha : admin
+### 🩳 API `http://localhost:9501` (Veja a seção de Documentação da API mais abaixo)
+### 💅 Front `http://localhost:9000`
+### 🪖 Database `jdbc:mysql://localhost:3306`
+- user : flykit
+- senha : flykit
+---
+
 ## ⚙️ Como Executar o Projeto
 Passo 1: Abra o terminal no diretório do docker-compose.yml
 
@@ -35,11 +46,6 @@ Acessar os cookies do navegador (F12 -> Application -> Cookies) e excluir o "Sec
     - jotaro@kutcho.com
     - tim@henson.com
   🔑 Ambos com a senha **123456**, utilize o e-mail como login.
-
-## 🍂 RabbitMQ (GUI)
-Acesse `http://localhost:15672`
-- user : admin
-- senha : admin
 
 ## 🐦 Documentação da API
 
