@@ -4,11 +4,19 @@ import { api } from 'src/lib/axios';
 
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli-vite/boot-files
-export default defineBoot(async (/* { app, router, ... } */) => {
+export default defineBoot(async ({ router }) => {
   const authStore = useAuthStore();
 
+  router.beforeEach((to, from, next) => {
+    if (to.path === '/login' && authStore.user) {
+      next('/orders');
+      return;
+    }
+
+    next();
+  });
+
   try {
-    debugger;
     const response = await api.get('/profile');
 
     authStore.user = {

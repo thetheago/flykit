@@ -113,7 +113,7 @@ async function onSubmit(): Promise<void> {
     });
 
     console.log('Login success');
-    await router.push('/vue');
+    await router.push('/orders');
   } catch (error: unknown) {
     console.error('Login error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Login failed';

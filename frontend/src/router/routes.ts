@@ -2,17 +2,6 @@ import type { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/vue',
-    component: () => import('layouts/MainLayout.vue'),
-    meta: { requiresAuth: true },
-    children: [
-      {
-        path: '',
-        component: () => import('pages/IndexPage.vue'),
-      },
-    ],
-  },
-  {
     path: '/',
     component: () => import('layouts/BlankLayout.vue'),
     children: [
@@ -23,6 +12,17 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'login',
         component: () => import('pages/LoginPage.vue'),
+      },
+    ],
+  },
+  {
+    path: '/orders',
+    component: () => import('layouts/OrderLayout.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        component: () => import('src/pages/Order/OrderPage.vue'),
       },
     ],
   },
