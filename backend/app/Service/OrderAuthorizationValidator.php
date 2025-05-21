@@ -13,7 +13,7 @@ class OrderAuthorizationValidator implements OrderAuthorizationValidatorInterfac
 {
     public function validateOrderUpdate(Order $order, User $user, string $newStatus): void
     {
-        $orderBelongsToUser = $order->belongsToUser($user->id);
+        $orderBelongsToUser = $order->belongsToUser((int) $user->id);
         $userIsAdmin = $user->isAdmin();
 
         if ($userIsAdmin) {
