@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Constants\AuthConstants;
 use App\Factory\LoginInputFactory;
 use App\Factory\LoginOutputFactory;
 use App\Interfaces\AuthTokenInterface;
@@ -44,7 +45,7 @@ class AuthController
         $output = $loginUsecase->execute($input);
 
         $cookie = new Cookie(
-            name: 'token',
+            name: AuthConstants::TOKEN_NAME,
             value: $output->getToken(),
             expire: $output->getExpirationTime()
         );

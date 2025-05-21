@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use App\Constants\AuthConstants;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -39,7 +40,11 @@ class AuthMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): PsrResponseInterface
     {
-        $token = $this->request->getHeader('Authorization');
+        $token = $this->request->getHeader(AuthConstants::TOKEN_NAME);
+
+        if (empty($token)) {
+            $token = [$this->getTokenFromCookie()];
+        }
 
         if (empty($token)) {
             return (new HyperfResponse())->json([
@@ -57,5 +62,17 @@ class AuthMiddleware implements MiddlewareInterface
         }
 
         return $handler->handle($request);
+    }
+
+    private function getTokenFromCookie(): string|null
+    {
+        $cookieParams = $this->request->getCookieParams();
+        $cookieToken = $cookieParams[AuthConstants::TOKEN_NAME] ?? null;
+
+        if (empty($cookieToken)) {
+            return null;
+        }
+
+        return $cookieToken;
     }
 }
