@@ -26,11 +26,11 @@
       </div>
       <div class="detail-item">
         <span class="label">Saída:</span>
-        <span class="value">{{ formatDate(order.departureDate) }}</span>
+        <span class="value">{{ formatDateForDisplay(order.departureDate) }}</span>
       </div>
       <div class="detail-item">
         <span class="label">Chegada:</span>
-        <span class="value">{{ formatDate(order.arrivalDate) }}</span>
+        <span class="value">{{ formatDateForDisplay(order.arrivalDate) }}</span>
       </div>
     </div>
 
@@ -42,6 +42,7 @@
 
 <script setup lang="ts">
 import { ORDER_STATUS, type OrderStatus, type OrderCardProps } from './types';
+import { formatDateForDisplay } from '../../utils/dateUtils';
 
 const props = defineProps<OrderCardProps>();
 
@@ -52,10 +53,6 @@ function getStatusLabel(status: OrderStatus): string {
     [ORDER_STATUS.CANCELLED]: 'Cancelado',
   };
   return labels[status];
-}
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('pt-BR');
 }
 
 function handleCardClick() {

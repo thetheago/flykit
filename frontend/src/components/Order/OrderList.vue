@@ -1,5 +1,13 @@
 <template>
   <div class="orders-container">
+    <div class="orders-header">
+      <h1>Pedidos</h1>
+      <button class="create-button" @click="openCreateModal">
+        <span class="plus-icon">+</span>
+        Novo Pedido
+      </button>
+    </div>
+
     <div v-if="loading" class="loading-state">
       <div class="spinner"></div>
       <p>Carregando pedidos...</p>
@@ -28,6 +36,8 @@
       @close="closeModal"
       @save="saveStatus"
     />
+
+    <CreateOrderModal v-model="showCreateModal" @created="handleOrderCreated" />
   </div>
 </template>
 
@@ -38,6 +48,7 @@ import { api } from '../../lib/axios';
 import { type Order, type OrderStatus } from './types';
 import OrderCard from './OrderCard.vue';
 import OrderModal from './OrderModal.vue';
+import CreateOrderModal from './CreateOrderModal.vue';
 
 const orders = ref<Order[]>([]);
 const loading = ref(true);
@@ -47,6 +58,8 @@ const showModal = ref(false);
 const selectedOrder = ref<Order | null>(null);
 const saving = ref(false);
 const modalError = ref<string | null>(null);
+
+const showCreateModal = ref(false);
 
 const authStore = useAuthStore();
 const isAdmin = computed(() => authStore.isAdmin());
@@ -116,6 +129,14 @@ async function saveStatus(status: OrderStatus) {
   } finally {
     saving.value = false;
   }
+}
+
+function openCreateModal() {
+  showCreateModal.value = true;
+}
+
+async function handleOrderCreated() {
+  await fetchOrders();
 }
 </script>
 
