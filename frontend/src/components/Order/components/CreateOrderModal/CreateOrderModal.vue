@@ -86,10 +86,15 @@
 import { ref, computed } from 'vue';
 import { useQuasar } from 'quasar';
 import { QDialog, QCard, QCardSection, QCardActions, QBtn, QInput } from 'quasar';
-import { api } from '../../lib/axios';
-import DateInput from './DateInput.vue';
-import type { CreateOrderFormData, ValidationErrors } from '../../types/order';
-import { getMinDate, getMaxDate, formatDateForApi, isValidDateRange } from '../../utils/dateUtils';
+import { api } from '../../../../lib/axios';
+import DateInput from './components/DateInput.vue';
+import type { CreateOrderFormData, ValidationErrors } from '../../../../types/order';
+import {
+  getMinDate,
+  getMaxDate,
+  formatDateForApi,
+  isValidDateRange,
+} from '../../../../utils/dateUtils';
 
 interface Props {
   modelValue: boolean;
@@ -285,33 +290,6 @@ async function handleSubmit() {
 }
 </script>
 
-<style scoped>
-.modal-content {
-  min-width: 400px;
-  max-width: 500px;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-}
-
-.create-order-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-group label {
-  font-weight: 500;
-  color: #333;
-}
+<style lang="scss" scoped>
+@import './CreateOrderModal.scss';
 </style>

@@ -2,21 +2,21 @@
   <div class="orders-container">
     <div class="orders-header">
       <h1>Pedidos</h1>
-      <button class="create-button" @click="openCreateModal">
-        <span class="plus-icon">+</span>
+      <button class="orders-header__create-button" @click="openCreateModal">
+        <span class="orders-header__plus-icon">+</span>
         Novo Pedido
       </button>
     </div>
 
     <StatusFilter @filter="handleStatusFilter" />
 
-    <div v-if="loading" class="loading-state">
-      <div class="spinner"></div>
+    <div v-if="loading" class="orders-loading">
+      <div class="orders-loading__spinner"></div>
       <p>Carregando pedidos...</p>
     </div>
 
-    <div v-else-if="error" class="error-state">
-      <i class="error-icon">⚠️</i>
+    <div v-else-if="error" class="orders-error">
+      <i class="orders-error__icon">⚠️</i>
       <p>{{ error }}</p>
     </div>
 
@@ -48,10 +48,10 @@ import { ref, computed, onMounted } from 'vue';
 import { useAuthStore } from '../../stores/auth';
 import { api } from '../../lib/axios';
 import { type Order, type OrderStatus } from './types';
-import OrderCard from './OrderCard.vue';
-import OrderModal from './OrderModal.vue';
-import CreateOrderModal from './CreateOrderModal.vue';
-import StatusFilter from './Filter/StatusFilter.vue';
+import OrderCard from './components/OrderCard/OrderCard.vue';
+import OrderModal from './components/OrderModal/OrderModal.vue';
+import CreateOrderModal from './components/CreateOrderModal/CreateOrderModal.vue';
+import StatusFilter from './components/Filter/StatusFilter/StatusFilter.vue';
 
 const orders = ref<Order[]>([]);
 const loading = ref(true);
@@ -72,11 +72,16 @@ const currentStatus = ref<OrderStatus | null>(null);
 const fetchOrders = async () => {
   try {
     loading.value = true;
+    error.value = null;
     const params = currentStatus.value ? { status: currentStatus.value } : {};
+    console.log('Fetching orders with params:', params);
     const response = await api.get('/v1/order', { params });
+    console.log('Orders received from API:', response.data);
     orders.value = response.data;
-  } catch (error) {
-    console.error('Error fetching orders:', error);
+    console.log('Orders after update:', orders.value);
+  } catch (err) {
+    console.error('Error fetching orders:', err);
+    error.value = 'Erro ao carregar pedidos. Tente novamente mais tarde.';
   } finally {
     loading.value = false;
   }
@@ -100,41 +105,60 @@ function closeModal() {
 
 async function saveStatus(status: OrderStatus) {
   if (!selectedOrder.value) return;
+
   saving.value = true;
   modalError.value = null;
+
   try {
-    await api.patch(`/v1/order/${selectedOrder.value.orderId}`, {
-      status,
-    });
-    // Atualiza localmente
+    await api.patch(`/v1/order/${selectedOrder.value.orderId}`, { status });
+
+    // Update locally
     const idx = orders.value.findIndex((o) => o.orderId === selectedOrder.value!.orderId);
-    if (idx !== -1) {
-      (orders.value[idx] as Order).status = status;
+    const currentOrder = idx !== -1 ? orders.value[idx] : null;
+
+    if (currentOrder) {
+      const updatedOrder: Order = {
+        orderId: currentOrder.orderId,
+        requesterName: currentOrder.requesterName,
+        destination: currentOrder.destination,
+        departureDate: currentOrder.departureDate,
+        arrivalDate: currentOrder.arrivalDate,
+        status: status,
+      };
+      orders.value[idx] = updatedOrder;
     }
+
     closeModal();
   } catch (err: unknown) {
-    if (
-      typeof err === 'object' &&
-      err !== null &&
-      'response' in err &&
-      typeof (err as { response?: unknown }).response === 'object' &&
-      (err as { response?: { data?: unknown } }).response &&
-      'data' in (err as { response: { data?: unknown } }).response &&
-      typeof (err as { response: { data?: unknown } }).response.data === 'object' &&
-      (err as { response: { data: { error?: string } } }).response.data &&
-      'error' in (err as { response: { data: { error?: string } } }).response.data
-    ) {
-      modalError.value =
-        (err as { response: { data: { error?: string } } }).response.data.error ||
-        'Erro ao atualizar status';
-    } else if (typeof err === 'object' && err && 'message' in err) {
-      modalError.value = (err as { message?: string }).message || 'Erro ao atualizar status';
-    } else {
-      modalError.value = 'Erro ao atualizar status';
-    }
+    modalError.value = getErrorMessage(err);
   } finally {
     saving.value = false;
   }
+}
+
+function getErrorMessage(err: unknown): string {
+  if (
+    typeof err === 'object' &&
+    err !== null &&
+    'response' in err &&
+    typeof (err as { response?: unknown }).response === 'object' &&
+    (err as { response?: { data?: unknown } }).response &&
+    'data' in (err as { response: { data?: unknown } }).response &&
+    typeof (err as { response: { data?: unknown } }).response.data === 'object' &&
+    (err as { response: { data: { error?: string } } }).response.data &&
+    'error' in (err as { response: { data: { error?: string } } }).response.data
+  ) {
+    return (
+      (err as { response: { data: { error?: string } } }).response.data.error ||
+      'Erro ao atualizar status'
+    );
+  }
+
+  if (typeof err === 'object' && err && 'message' in err) {
+    return (err as { message?: string }).message || 'Erro ao atualizar status';
+  }
+
+  return 'Erro ao atualizar status';
 }
 
 function openCreateModal() {
@@ -142,15 +166,17 @@ function openCreateModal() {
 }
 
 async function handleOrderCreated() {
+  console.log('Order created, fetching updated list...');
   await fetchOrders();
+  console.log('Orders after creation:', orders.value);
 }
 
-const handleStatusFilter = (status: OrderStatus | null) => {
+function handleStatusFilter(status: OrderStatus | null) {
   currentStatus.value = status;
   void fetchOrders();
-};
+}
 </script>
 
-<style scoped>
-@import './OrderList.scss';
+<style lang="scss">
+@import './styles.scss';
 </style>

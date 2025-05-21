@@ -75,19 +75,6 @@ function handleCalendarChange(value: string) {
 }
 </script>
 
-<style scoped>
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-group label {
-  font-weight: 500;
-  color: #333;
-}
-
-.cursor-pointer {
-  cursor: pointer;
-}
+<style lang="scss" scoped>
+@import './DateInput.scss';
 </style>

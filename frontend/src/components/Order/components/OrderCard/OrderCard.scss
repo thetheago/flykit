@@ -1,0 +1,136 @@
+.order-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &--approved,
+  &--cancelled {
+    &:hover {
+      transform: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+  }
+
+  &__status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    &--requested {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    &--approved {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    &--cancelled {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__date,
+  &__customer,
+  &__destination {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+
+    i {
+      font-size: 1rem;
+      color: #adb5bd;
+    }
+  }
+
+  &__actions {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+  }
+
+  &__edit-button {
+    width: 100%;
+    padding: 0.5rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: #0056b3;
+    }
+
+    &:disabled {
+      background: #e9ecef;
+      color: #adb5bd;
+      cursor: not-allowed;
+    }
+  }
+
+  &--admin {
+    border: 1px solid #e9ecef;
+  }
+
+  &--approved {
+    background: #f8f9fa;
+    opacity: 0.9;
+
+    .order-card__edit-button {
+      background: #e9ecef;
+      color: #adb5bd;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  &--cancelled {
+    background: #f8f9fa;
+    opacity: 0.9;
+
+    .order-card__edit-button {
+      background: #e9ecef;
+      color: #adb5bd;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+}
