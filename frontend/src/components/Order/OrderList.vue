@@ -8,6 +8,8 @@
       </button>
     </div>
 
+    <StatusFilter @filter="handleStatusFilter" />
+
     <div v-if="loading" class="loading-state">
       <div class="spinner"></div>
       <p>Carregando pedidos...</p>
@@ -49,6 +51,7 @@ import { type Order, type OrderStatus } from './types';
 import OrderCard from './OrderCard.vue';
 import OrderModal from './OrderModal.vue';
 import CreateOrderModal from './CreateOrderModal.vue';
+import StatusFilter from './Filter/StatusFilter.vue';
 
 const orders = ref<Order[]>([]);
 const loading = ref(true);
@@ -64,10 +67,13 @@ const showCreateModal = ref(false);
 const authStore = useAuthStore();
 const isAdmin = computed(() => authStore.isAdmin());
 
+const currentStatus = ref<OrderStatus | null>(null);
+
 const fetchOrders = async () => {
   try {
     loading.value = true;
-    const response = await api.get('/v1/order');
+    const params = currentStatus.value ? { status: currentStatus.value } : {};
+    const response = await api.get('/v1/order', { params });
     orders.value = response.data;
   } catch (error) {
     console.error('Error fetching orders:', error);
@@ -138,6 +144,11 @@ function openCreateModal() {
 async function handleOrderCreated() {
   await fetchOrders();
 }
+
+const handleStatusFilter = (status: OrderStatus | null) => {
+  currentStatus.value = status;
+  void fetchOrders();
+};
 </script>
 
 <style scoped>
