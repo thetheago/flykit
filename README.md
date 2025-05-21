@@ -37,6 +37,11 @@ Acessar os cookies do navegador (F12 -> Application -> Cookies) e excluir o "Sec
     - tim@henson.com
   🔑 Ambos com a senha **123456**, utilize o e-mail como login.
 
+## 🍂 RabbitMQ (GUI)
+Acesse `http://localhost:15672`
+- user : admin
+- senha : admin
+
 ## 🐦 Documentação da API
 
 - Lutei com o swagger do hyperf e perdi 😂, então tem um container do próprio swagger que interpreta o .yml e disponibiliza o html em http://localhost:8091
