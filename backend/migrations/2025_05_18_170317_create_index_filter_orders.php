@@ -25,10 +25,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('order', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+            
             $table->dropIndex('idx_orders_user_status');
             $table->dropIndex('idx_orders_dates');
             $table->dropIndex('idx_orders_destination');
             $table->dropIndex('idx_orders_destination_dates');
+            
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 };
