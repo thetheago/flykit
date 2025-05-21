@@ -6,7 +6,7 @@ const API_URL = 'http://localhost:9501';
 
 export const api = axios.create({
   baseURL: API_URL,
-  withCredentials: true,
+  withCredentials: true, // enviar e receber cookies
   headers: {
     'Content-Type': 'application/json',
   },
@@ -15,7 +15,8 @@ export const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('Axios error:', error);
+    const errorToReject = error instanceof Error ? error : new Error(String(error));
+    return Promise.reject(errorToReject);
   },
 );
 
