@@ -11,7 +11,6 @@ class JwtToken
     public function __construct(
         private int $id,
         private string $email,
-        private bool $isAdmin,
         private int $iat,
     ) {
     }
@@ -24,11 +23,6 @@ class JwtToken
     public function getEmail(): string
     {
         return $this->email;
-    }
-
-    public function getIsAdmin(): bool
-    {
-        return $this->isAdmin;
     }
 
     public function getExp(): int
@@ -46,7 +40,6 @@ class JwtToken
         return [
             'id' => $this->id,
             'email' => $this->email,
-            'isAdmin' => $this->isAdmin,
             'exp' => $this->getExp(),
             'iat' => $this->iat,
         ];

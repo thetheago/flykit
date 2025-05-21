@@ -49,6 +49,10 @@ class AuthController
             expire: $output->getExpirationTime()
         );
 
-        return $this->response->withCookie($cookie)->withContent('')->withStatus(HttpResponse::HTTP_OK);
+        return $this->response
+                ->withCookie($cookie)
+                ->withContent(json_encode($output->toArray()))
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(HttpResponse::HTTP_OK);
     }
 }
