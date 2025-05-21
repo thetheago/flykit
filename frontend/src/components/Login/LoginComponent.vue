@@ -2,8 +2,8 @@
   <div class="login-container">
     <div class="login-form-container">
       <div class="login-form">
-        <h1 class="login-title">Hello</h1>
-        <p class="login-subtitle">Please sign in below</p>
+        <h1 class="login-title">Olá</h1>
+        <p class="login-subtitle">Por favor, entre com suas credenciais</p>
 
         <form @submit.prevent="onSubmit">
           <div class="form-group">
@@ -13,13 +13,13 @@
               outlined
               class="login-input"
               dense
-              :rules="[(val) => !!val || 'Email is required', isValidEmail]"
+              :rules="[(val) => !!val || 'Email é obrigatório', isValidEmail]"
               lazy-rules
             />
           </div>
 
           <div class="form-group">
-            <label class="input-label">Password</label>
+            <label class="input-label">Senha</label>
             <q-input
               v-model="password"
               outlined
@@ -27,8 +27,8 @@
               class="login-input"
               dense
               :rules="[
-                (val) => !!val || 'Password is required',
-                (val) => val.length >= 6 || 'Password must be at least 6 characters',
+                (val) => !!val || 'Senha é obrigatória',
+                (val) => val.length >= 6 || 'A senha deve ter pelo menos 6 caracteres',
               ]"
               lazy-rules
             >
@@ -46,7 +46,7 @@
             type="submit"
             class="sign-in-btn"
             color="primary"
-            label="Sign in"
+            label="Entrar"
             no-caps
             unelevated
             full-width
@@ -92,7 +92,7 @@ async function onSubmit(): Promise<void> {
     if (!email.value || !password.value) {
       $q.notify({
         type: 'warning',
-        message: 'Please fill in all fields',
+        message: 'Por favor, preencha todos os campos',
         position: 'top',
         timeout: 2000,
       });
@@ -105,18 +105,21 @@ async function onSubmit(): Promise<void> {
 
     await authStore.login(email.value, password.value);
 
-    $q.notify({
-      type: 'positive',
-      message: 'Login successful!',
-      position: 'top',
-      timeout: 2000,
-    });
+    if (authStore.error) {
+      $q.notify({
+        type: 'negative',
+        message: authStore.error,
+        position: 'top',
+        timeout: 3000,
+      });
 
-    console.log('Login success');
+      return;
+    }
+
     await router.push('/orders');
   } catch (error: unknown) {
-    console.error('Login error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Login failed';
+    console.error('Erro ao fazer login:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Erro ao fazer login';
 
     $q.notify({
       type: 'negative',

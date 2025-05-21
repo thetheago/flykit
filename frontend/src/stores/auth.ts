@@ -29,8 +29,9 @@ export const useAuthStore = defineStore('auth', {
           isAdmin: response.data.isAdmin,
         };
       } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const error = err as AxiosError<ApiError>;
-        this.error = error.response?.data?.error || 'Login failed';
+        this.error = 'Login falhou';
         this.user = null;
       }
     },
