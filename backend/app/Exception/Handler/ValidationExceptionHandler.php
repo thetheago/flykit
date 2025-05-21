@@ -8,6 +8,7 @@ use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Hyperf\Validation\ValidationException;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class ValidationExceptionHandler extends ExceptionHandler
@@ -19,12 +20,12 @@ class ValidationExceptionHandler extends ExceptionHandler
         /** @var ValidationException $throwable */
         $result = [
             'message' => 'Validation failed',
-            'errors' => $throwable->validator->errors()->getMessages(),
+            'errors' => $throwable->validator->errors()->all(),
         ];
 
         return $response
             ->withHeader('Content-Type', 'application/json')
-            ->withStatus(422)
+            ->withStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->withBody(new SwooleStream(json_encode($result)));
     }
 

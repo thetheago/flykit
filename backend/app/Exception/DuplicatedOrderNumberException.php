@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-use App\Exception\CustomException;
 use Symfony\Component\HttpFoundation\Response;
 
-class DuplicatedOrderNumberException extends CustomException
+class DuplicatedOrderNumberException extends CustomDomainException
 {
     public function __construct()
     {
