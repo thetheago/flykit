@@ -49,7 +49,7 @@ class AaOrderSeeder extends Seeder
         ]);
 
         Order::create([
-            'order_id' => 1236,
+            'order_id' => 1242,
             'user_id' => 2,
             'status' => OrderStatus::REQUESTED,
             'requester_name' => 'Mulan',

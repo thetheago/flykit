@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('order', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('order_id');
+            $table->integer('order_id')->unique();
             $table->string('requester_name');
             $table->string('destination');
             $table->date('departure_date');
