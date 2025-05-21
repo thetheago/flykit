@@ -7,15 +7,6 @@ import { api } from 'src/lib/axios';
 export default defineBoot(async ({ router }) => {
   const authStore = useAuthStore();
 
-  router.beforeEach((to, from, next) => {
-    if (to.path === '/login' && authStore.user) {
-      next('/orders');
-      return;
-    }
-
-    next();
-  });
-
   try {
     const response = await api.get('/profile');
 
@@ -25,6 +16,15 @@ export default defineBoot(async ({ router }) => {
     };
   } catch (err) {
     console.error(err);
-    authStore.user = null;
+    authStore.logout();
   }
+
+  router.beforeEach((to, from, next) => {
+    if (to.path === '/login' && !authStore.isAuthenticated()) {
+      next('/orders');
+      return;
+    }
+
+    next();
+  });
 });
