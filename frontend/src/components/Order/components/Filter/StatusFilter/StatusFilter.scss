@@ -1,0 +1,55 @@
+.status-filter {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+
+  &__button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background: white;
+    color: $dark;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(&--active) {
+      background: #f8f9fa;
+      border-color: #ced4da;
+    }
+
+    &--active {
+      color: $dark;
+      border-color: $dark;
+    }
+
+    &--requested {
+      &--active {
+        background: $warning;
+        color: darken($warning, 30%);
+      }
+    }
+
+    &--approved {
+      &--active {
+        background: $positive;
+        color: white;
+      }
+    }
+
+    &--cancelled {
+      &--active {
+        background: $negative;
+        color: white;
+      }
+    }
+
+    &--clear {
+      &--active {
+        background: $primary;
+        color: white;
+      }
+    }
+  }
+}
