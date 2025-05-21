@@ -12,7 +12,7 @@ class OrderCreateInputFactory
 {
     public function createFromRequest(OrderCreateRequest $request, ContainerInterface $container): OrderCreateInput
     {
-        $orderId = $request->input('orderId');
+        $orderId = (int) $request->input('orderId');
         $requesterName = $request->input('requesterName');
         $destination = $request->input('destination');
         $departureDate = $request->input('departureDate');
@@ -27,7 +27,7 @@ class OrderCreateInputFactory
             departureDate: $departureDate,
             arrivalDate: $arrivalDate,
             status: $status,
-            userId: $user->id
+            userId: (int) $user->id
         );
     }
 }

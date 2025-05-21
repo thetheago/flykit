@@ -2,10 +2,9 @@
 
 namespace App\Exception;
 
-use App\Exception\CustomException;
 use Symfony\Component\HttpFoundation\Response;
 
-class InvalidArrivalDateException extends CustomException
+class InvalidArrivalDateException extends CustomDomainException
 {
     public function __construct()
     {

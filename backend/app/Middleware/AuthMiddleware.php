@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use App\Constants\AuthConstants;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -16,6 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 use function Hyperf\Support\env;
 
@@ -39,7 +41,11 @@ class AuthMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): PsrResponseInterface
     {
-        $token = $this->request->getHeader('Authorization');
+        $token = $this->request->getHeader(AuthConstants::TOKEN_NAME);
+
+        if (empty($token)) {
+            $token = [$this->getTokenFromCookie()];
+        }
 
         if (empty($token)) {
             return (new HyperfResponse())->json([
@@ -48,14 +54,26 @@ class AuthMiddleware implements MiddlewareInterface
         }
 
         try {
-            $decoded = JWT::decode($token[0], new Key($this->jwtSecretKey, 'HS256'));
+            $decoded = JWT::decode(jwt: $token[0], keyOrKeyArray: new Key($this->jwtSecretKey, 'HS256'));
             $this->container->set('user', $decoded);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             return (new HyperfResponse())->json([
                 'message' => 'Token de autenticação inválido.',
             ])->withStatus(Response::HTTP_UNAUTHORIZED);
         }
 
         return $handler->handle($request);
+    }
+
+    private function getTokenFromCookie(): string|null
+    {
+        $cookieParams = $this->request->getCookieParams();
+        $cookieToken = $cookieParams[AuthConstants::TOKEN_NAME] ?? null;
+
+        if (empty($cookieToken)) {
+            return null;
+        }
+
+        return $cookieToken;
     }
 }

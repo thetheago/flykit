@@ -14,11 +14,13 @@ class JwtTokenTest extends TestCase
         $id = 1;
         $email = 'jogos@mortais.com';
         $iat = time();
-
-        $jwtToken = new JwtToken(id: $id, email: $email, iat: $iat);
+        $isAdmin = true;
+        $jwtToken = new JwtToken(id: $id, email: $email, iat: $iat, isAdmin: $isAdmin);
         $this->assertEquals($id, $jwtToken->getId());
         $this->assertEquals($email, $jwtToken->getEmail());
         $this->assertEquals($iat, $jwtToken->getIat());
+        $this->assertEquals($iat + JwtToken::EXPIRATION_TIME, $jwtToken->getExp());
+        $this->assertEquals($isAdmin, $jwtToken->getIsAdmin());
     }
 
     public function testToArrayJwtToken()
@@ -26,12 +28,14 @@ class JwtTokenTest extends TestCase
         $id = 1;
         $email = 'patricia@abravanel.com';
         $iat = time();
-
-        $jwtToken = new JwtToken(id: $id, email: $email, iat: $iat);
+        $isAdmin = true;
+        $jwtToken = new JwtToken(id: $id, email: $email, iat: $iat, isAdmin: $isAdmin);
         $this->assertEquals([
             'id' => $id,
             'email' => $email,
             'iat' => $iat,
+            'exp' => $iat + JwtToken::EXPIRATION_TIME,
+            'isAdmin' => $isAdmin,
         ], $jwtToken->toArray());
     }
 }

@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Constants\AuthConstants;
 use App\Factory\LoginInputFactory;
+use App\Factory\LoginOutputFactory;
 use App\Interfaces\AuthTokenInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Request\LoginRequest;
 use App\Usecase\LoginUseCase;
 use Hyperf\Di\Annotation\Inject;
-use Hyperf\HttpServer\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Hyperf\HttpMessage\Cookie\Cookie;
 
-class AuthController
+class AuthController extends AbstractController
 {
     #[Inject]
     private UserRepositoryInterface $userRepository;
@@ -24,15 +26,40 @@ class AuthController
     #[Inject]
     private AuthTokenInterface $jwtService;
 
+    #[Inject]
+    private LoginOutputFactory $loginOutputFactory;
+
     public function login(LoginRequest $request)
     {
         $input = $this->loginInputFactory->createFromRequest($request);
 
-        $loginUsecase = new LoginUseCase($this->userRepository, $this->jwtService);
+        $loginUsecase = new LoginUseCase(
+            userRepository: $this->userRepository,
+            jwtService: $this->jwtService,
+            loginOutputFactory: $this->loginOutputFactory,
+        );
         $output = $loginUsecase->execute($input);
 
-        return (new Response())->json([
-            'token' => $output->getToken(),
+        $cookie = new Cookie(
+            name: AuthConstants::TOKEN_NAME,
+            value: $output->getToken(),
+            expire: $output->getExpirationTime()
+        );
+
+        return $this->response
+                ->withCookie($cookie)
+                ->withContent(json_encode($output->toArray()))
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(HttpResponse::HTTP_OK);
+    }
+
+    public function profile()
+    {
+        $user = $this->container->get('user');
+
+        return $this->response->json([
+            'email' => $user->email,
+            'isAdmin' => $user->isAdmin,
         ])->withStatus(HttpResponse::HTTP_OK);
     }
 }

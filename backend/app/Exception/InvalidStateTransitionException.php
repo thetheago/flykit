@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-use App\Exception\CustomException;
 use Symfony\Component\HttpFoundation\Response;
 
-class InvalidStateTransitionException extends CustomException
+class InvalidStateTransitionException extends CustomDomainException
 {
     public function __construct(string $message)
     {
