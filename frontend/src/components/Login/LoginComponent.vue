@@ -51,7 +51,6 @@
             unelevated
             full-width
             :loading="loading"
-            @click="onSubmit"
           >
             <template v-slot:loading>
               <q-spinner-dots color="white" />
@@ -69,8 +68,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
+import { useAuthStore } from 'stores/auth';
+
 const $q = useQuasar();
+
+const router = useRouter();
+const authStore = useAuthStore();
 
 const email = ref('');
 const password = ref('');
@@ -91,7 +96,6 @@ async function onSubmit(): Promise<void> {
         position: 'top',
         timeout: 2000,
       });
-
       return;
     }
 
@@ -99,7 +103,7 @@ async function onSubmit(): Promise<void> {
 
     console.log('Attempting login with:', { email: email.value, password: password.value });
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await authStore.login(email.value, password.value);
 
     $q.notify({
       type: 'positive',
@@ -109,6 +113,7 @@ async function onSubmit(): Promise<void> {
     });
 
     console.log('Login success');
+    await router.push('/vue');
   } catch (error: unknown) {
     console.error('Login error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Login failed';

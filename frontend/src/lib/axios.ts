@@ -1,7 +1,11 @@
 import axios from 'axios';
 
+// const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:9501';
+
+const API_URL = 'http://localhost:9501';
+
 export const api = axios.create({
-  baseURL: process.env.API_URL || 'http://localhost:9501',
+  baseURL: API_URL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

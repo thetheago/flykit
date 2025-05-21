@@ -15,12 +15,10 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null as IUser | null,
     error: null as string | null,
-    loading: false,
   }),
 
   actions: {
     async login(email: string, password: string) {
-      this.loading = true;
       this.error = null;
 
       try {
@@ -34,8 +32,6 @@ export const useAuthStore = defineStore('auth', {
         const error = err as AxiosError<ApiError>;
         this.error = error.response?.data?.error || 'Login failed';
         this.user = null;
-      } finally {
-        this.loading = false;
       }
     },
 
