@@ -17,6 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 use function Hyperf\Support\env;
 
@@ -53,9 +54,9 @@ class AuthMiddleware implements MiddlewareInterface
         }
 
         try {
-            $decoded = JWT::decode($token[0], new Key($this->jwtSecretKey, 'HS256'));
+            $decoded = JWT::decode(jwt: $token[0], keyOrKeyArray: new Key($this->jwtSecretKey, 'HS256'));
             $this->container->set('user', $decoded);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             return (new HyperfResponse())->json([
                 'message' => 'Token de autenticação inválido.',
             ])->withStatus(Response::HTTP_UNAUTHORIZED);

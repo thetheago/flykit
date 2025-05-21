@@ -56,6 +56,10 @@ class AuthController extends AbstractController
     public function profile()
     {
         $user = $this->container->get('user');
-        return $this->response->json($user)->withStatus(HttpResponse::HTTP_OK);
+
+        return $this->response->json([
+            'email' => $user->email,
+            'isAdmin' => $user->isAdmin,
+        ])->withStatus(HttpResponse::HTTP_OK);
     }
 }
