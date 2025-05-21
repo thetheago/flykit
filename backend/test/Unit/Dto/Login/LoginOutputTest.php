@@ -12,9 +12,10 @@ class LoginOutputTest extends TestCase
     public function testDtoWithSuccess()
     {
         $token = 'tokenRandom';
-
-        $output = new LoginOutput(token: $token);
+        $expirationTime = 100;
+        $output = new LoginOutput(token: $token, expirationTime: $expirationTime);
 
         $this->assertEquals($token, $output->getToken());
+        $this->assertEquals($expirationTime, $output->getExpirationTime());
     }
 }

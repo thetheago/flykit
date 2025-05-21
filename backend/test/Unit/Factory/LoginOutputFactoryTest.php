@@ -12,11 +12,14 @@ use Mockery;
 
 class LoginOutputFactoryTest extends TestCase
 {
-    $jwtTokenMock = Mockery::mock(JwtToken::class);
-    $jwtTokenMock->shouldReceive('getExp');
+    public function testCreateFromLoginUseCase()
+    {
+        $jwtTokenMock = Mockery::mock(JwtToken::class);
+        $jwtTokenMock->shouldReceive('getExp');
 
-    $loginOutputFactory = new LoginOutputFactory();
-    $loginOutput = $loginOutputFactory->createFromLoginUseCase($jwtTokenMock, 'tokenQualquer');
+        $loginOutputFactory = new LoginOutputFactory();
+        $loginOutput = $loginOutputFactory->createFromLoginUseCase($jwtTokenMock, 'tokenQualquer');
 
-    $this->assertInstanceOf($loginOutput, LoginOutput::class);
+        $this->assertInstanceOf(LoginOutput::class, $loginOutput);
+    }
 }
