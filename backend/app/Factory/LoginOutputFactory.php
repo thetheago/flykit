@@ -9,11 +9,11 @@ use App\Service\Jwt\JwtToken;
 
 class LoginOutputFactory
 {
-    public function createFromLoginUseCase(bool $userIsAdmin, JwtToken $tokenPayload, string $token): LoginOutput
+    public function createFromLoginUseCase(JwtToken $tokenPayload, string $token): LoginOutput
     {
         return new LoginOutput(
             email: $tokenPayload->getEmail(),
-            isAdmin: $userIsAdmin,
+            isAdmin: $tokenPayload->getIsAdmin(),
             token: $token,
             expirationTime: $tokenPayload->getExp(),
         );

@@ -47,6 +47,7 @@ class LoginUseCase
 
         $tokenPayload = new JwtToken(
             id: $user->id,
+            isAdmin: (bool) $user->is_admin,
             email: $user->email,
             iat: time()
         );
@@ -54,7 +55,6 @@ class LoginUseCase
         $token = $this->jwtService->generateToken($tokenPayload);
 
         return $this->loginOutputFactory->createFromLoginUseCase(
-            userIsAdmin: (bool) $user->is_admin,
             tokenPayload: $tokenPayload,
             token: $token
         );

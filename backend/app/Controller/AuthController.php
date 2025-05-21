@@ -14,9 +14,8 @@ use App\Usecase\LoginUseCase;
 use Hyperf\Di\Annotation\Inject;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Hyperf\HttpMessage\Cookie\Cookie;
-use Hyperf\HttpServer\Contract\ResponseInterface;
 
-class AuthController
+class AuthController extends AbstractController
 {
     #[Inject]
     private UserRepositoryInterface $userRepository;
@@ -29,9 +28,6 @@ class AuthController
 
     #[Inject]
     private LoginOutputFactory $loginOutputFactory;
-
-    #[Inject]
-    private ResponseInterface $response;
 
     public function login(LoginRequest $request)
     {
@@ -55,5 +51,11 @@ class AuthController
                 ->withContent(json_encode($output->toArray()))
                 ->withHeader('Content-Type', 'application/json')
                 ->withStatus(HttpResponse::HTTP_OK);
+    }
+
+    public function profile()
+    {
+        $user = $this->container->get('user');
+        return $this->response->json($user)->withStatus(HttpResponse::HTTP_OK);
     }
 }

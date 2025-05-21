@@ -17,10 +17,10 @@ class LoginOutputFactoryTest extends TestCase
         $jwtTokenMock = Mockery::mock(JwtToken::class);
         $jwtTokenMock->shouldReceive('getExp');
         $jwtTokenMock->shouldReceive('getEmail');
+        $jwtTokenMock->shouldReceive('getIsAdmin');
 
         $loginOutputFactory = new LoginOutputFactory();
         $loginOutput = $loginOutputFactory->createFromLoginUseCase(
-            userIsAdmin: true,
             tokenPayload: $jwtTokenMock,
             token: 'tokenQualquer'
         );
