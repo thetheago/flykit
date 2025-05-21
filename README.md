@@ -9,7 +9,6 @@
 - Quasar Framework
 - Composer
 - Docker & compose
-- Redis
 - (Outras tecnologias/libs: Swagger, Phpunit, RabbitMQ..)
 
 ### 🐨 Pré-requisitos
