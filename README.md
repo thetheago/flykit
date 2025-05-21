@@ -25,7 +25,7 @@ Passo 2: Rode o seguinte comando: ```docker compose up -d```
 
 ⚠️  O comando acima irá criar alguns usuários e pedidos de viagem no banco, necessário para fazer as operações, **como não deu tempo de fazer o logout da aplicação, caso queira fazer, será necessário uma das opções abaixo :**
 
-1. Acessar outro navegador.
+1. Acessar outro navegador (ou abrir uma nova aba anônima).
 
 2. Excluir cookie com token (está sem a opção de secure)
 Acessar os cookies do navegador (F12 -> Application -> Cookies) e excluir o "Secret-Token", após atualizar a página será redirecionado novamente ao login.
