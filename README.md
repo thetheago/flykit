@@ -31,21 +31,23 @@ Passo 1: Abra o terminal no diretório do docker-compose.yml
 
 Passo 2: Rode o seguinte comando: ```docker compose up -d```
 
-**⚠️ Passo 3**: Após a inicialização dos contaienrs rode ```docker compose exec flykit php bin/hyperf.php db:seed```
+**⚠️ Passo 3**: Após a inicialização dos containers rode ```docker compose exec flykit php bin/hyperf.php db:seed```
 
-⚠️  O comando acima irá criar alguns usuários e pedidos de viagem no banco, necessário para fazer as operações, **como não deu tempo de fazer o logout da aplicação, caso queira fazer, será necessário uma das opções abaixo :**
-
-1. Acessar outro navegador (ou abrir uma nova aba anônima).
-
-2. Excluir cookie com token (está sem a opção de secure)
-Acessar os cookies do navegador (F12 -> Application -> Cookies) e excluir o "Secret-Token", após atualizar a página será redirecionado novamente ao login.
-
+* O comando acima irá criar alguns usuários e pedidos de viagem no banco, necessário para fazer as operações. *
 ---
 - Será criado as tabelas e 3 usuários padrões para fazer testes:
     - admin@admin.com
     - jotaro@kutcho.com
     - tim@henson.com
+  
   🔑 Ambos com a senha **123456**, utilize o e-mail como login.
+
+**⚠️ Como não deu tempo de fazer o logout da aplicação, caso queira fazer, será necessário uma das opções abaixo :**
+
+1. Acessar outro navegador (ou abrir uma nova aba anônima).
+
+2. Excluir cookie com token (está sem a opção de secure)
+Acessar os cookies do navegador (F12 -> Application -> Cookies) e excluir o "Secret-Token", após atualizar a página será redirecionado novamente ao login.
 
 ## 🐦 Documentação da API
 
